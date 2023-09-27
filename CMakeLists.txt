@@ -3,8 +3,8 @@ cmake_minimum_required(VERSION 3.7.2)
 
 SET(CMAKE_C_STANDARD 11)
 
-SET(CMAKE_C_COMPILER   /usr/bin/gcc)
-SET(CMAKE_CXX_COMPILER   /usr/bin/g++)
+# SET(CMAKE_C_COMPILER   /usr/bin/gcc)
+# SET(CMAKE_CXX_COMPILER   /usr/bin/g++)
 
 project(log_tree)
 
