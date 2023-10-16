@@ -1,40 +1,15 @@
 #ifndef __LOG_TREE_H
 #define __LOG_TREE_H
 
-#include "stdio.h"
-
-#define log()  printf()
-
-/*================== log tree kernel ==================*/
-
-	
-
-/*================== ringbuffer ==================*/
-
-typedef unsigned char u8;	
+#include "string.h"
 
 
+#define buffer_size 1000    
 
-typedef struct{
-	u8 buffer[1000];
-	u8* Read_p;
-	u8* Write_p;
-}log_tree_ringbuffer, *log_tree_ringbuffer_p;
+#define lt_sucess	0
+#define lt_Insufficient_buffer	1
 
-
-
-
-
-/*
-  |
-  */
-// void log_tree_Init(log_tree_ringbuffer_p ringbuffer );
-
-
+void lt_init()
 
 #endif
-
-
-
-
 
