@@ -79,8 +79,8 @@ uint8_t lt_ringbuffer_pop(void)
 
 
 
-void lt_init(lt_type_t tpye)
-{
+// void lt_init(lt_type_t tpye)
+// {
 
-}
+// }
 

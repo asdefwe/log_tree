@@ -9,7 +9,7 @@
 #define lt_sucess	0
 #define lt_Insufficient_buffer	1
 
-void lt_init()
+// void lt_init();
 
 #endif
 

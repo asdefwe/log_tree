@@ -8,7 +8,6 @@
 #define log()  printf()
 
 /*================== log tree kernel ==================*/
-typedef unsigned char u8;	
 typedef uint8_t lt_uint8_t;
 typedef uint16_t lt_uint16_t;
 typedef uint32_t lt_uint32_t;	
@@ -36,17 +35,21 @@ typedef struct{
 
 
 
+/*================== ringbuffer ==================*/
+
+
+
 /*================== log tree ==================*/
 
-typedef struct{	
-	lt_uint8_t layers ;
-	lt_uint8_t format;
-}lt_type_t;
+// typedef struct{	
+// 	lt_uint8_t layers ;
+// 	lt_uint8_t format;
+// }lt_type_t;
 
-typedef struct{	
-	lt_uint8_t layers ;
-	lt_uint8_t format;
-}lt_logtree;
+// typedef struct{	
+// 	lt_uint8_t layers ;
+// 	lt_uint8_t format;
+// }lt_logtree;
 
 /*
   |
