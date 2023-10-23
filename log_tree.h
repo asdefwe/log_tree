@@ -1,7 +1,6 @@
 #ifndef __LOG_TREE_H
 #define __LOG_TREE_H
 
-#include "string.h"
 
 
 #define buffer_size 1000    

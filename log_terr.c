@@ -1,6 +1,6 @@
 #include "log_tree_def.h"
 #include "log_tree.h"
- 
+#include <string.h>
 
 
 /*=========================================*/
