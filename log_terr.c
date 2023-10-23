@@ -20,21 +20,11 @@ static void lt_ringbuffer_Init()
     lt_ringbuffer.write_p = lt_ringbuffer.ringbuffer.buffer_start;
 }
 
-lt_err_t lt_ringbuffer_push(uint8_t* data)
+lt_err_t lt_ringbuffer_push(uint8_t data)
 {
-    uint8_t len;
-
-    len = strlen(data);
-    if(lt_ringbuffer.write_p >lt_ringbuffer.read_p)
+    if(lt_ringbuffer.write_p == lt_ringbuffer.read_p)
     {
-        if(len > (lt_ringbuffer.read_p - lt_ringbuffer.ringbuffer.buffer_start) + 
-                       (lt_ringbuffer.ringbuffer.buffer_end - lt_ringbuffer.write_p))
-        return lt_Insufficient_buffer;
-    }
-    else if(lt_ringbuffer.read_p > lt_ringbuffer.write_p)
-    {
-        if(len > (lt_ringbuffer.read_p - lt_ringbuffer.write_p))
-        return lt_Insufficient_buffer;
+        return 1;
     }
 
     *lt_ringbuffer.write_p =  data;
@@ -50,21 +40,7 @@ lt_err_t lt_ringbuffer_push(uint8_t* data)
 uint8_t lt_ringbuffer_pop(void)
 {
     uint8_t data;
-    uint8_t len;
-
-    len = strlen(data);
-    if(lt_ringbuffer.write_p >lt_ringbuffer.read_p)
-    {
-        if(len > (lt_ringbuffer.read_p - lt_ringbuffer.ringbuffer.buffer_start) + 
-                       (lt_ringbuffer.ringbuffer.buffer_end - lt_ringbuffer.write_p))
-        return lt_Insufficient_buffer;
-    }
-    else if(lt_ringbuffer.read_p > lt_ringbuffer.write_p)
-    {
-        if(len > (lt_ringbuffer.read_p - lt_ringbuffer.write_p))
-        return lt_Insufficient_buffer;
-    }
-
+    
     data = *lt_ringbuffer.read_p;
     lt_ringbuffer.read_p++;
 

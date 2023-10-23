@@ -11,8 +11,10 @@ void test_ringbuffer()
 
     while(1)
     {
-        scanf(str);
-        printf("%s\r\n", str);
+        scanf("%s", str);
+        lt_ringbuffer_push(str);
+        char casdv = lt_ringbuffer_pop();
+        printf("%s\r\n", casdv);
 
     }
 
