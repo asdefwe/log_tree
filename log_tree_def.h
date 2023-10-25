@@ -1,37 +1,31 @@
 #ifndef __LOG_TREE_DEF_H
 #define __LOG_TREE_DEF_H
 
-#include "stdio.h"
-#include "stdint.h"
+
+#include <stdint.h>
+
 #include "log_tree.h"
 
-#define log()  printf()
+
 
 /*================== log tree kernel ==================*/
-typedef uint8_t lt_uint8_t;
-typedef uint16_t lt_uint16_t;
-typedef uint32_t lt_uint32_t;	
 
-typedef lt_uint32_t lt_err_t;
 
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
 
 
 /*================== ringbuffer ==================*/
 
-typedef struct{
-	lt_uint8_t buffer[buffer_size];
-	lt_uint8_t* buffer_start;
-	lt_uint8_t* buffer_end;
-}lt_ringbuffer_t;
 
 
 
 typedef struct{	
-	lt_uint8_t* read_p;
-	lt_uint8_t* write_p;
-	lt_ringbuffer_t ringbuffer;
-}log_tree_ringbuffer, *log_tree_ringbuffer_p;
+	uint8_t* 	buffer;
+	uint64_t	 buffer_size;
+	uint64_t 	length;
+	uint8_t* 	read;
+	uint8_t* 	write;
+}log_tree_ringbuffer_t, *log_tree_ringbuffer_p;
 
 
 

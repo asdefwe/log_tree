@@ -3,19 +3,36 @@
 #include <stdlib.h>
 #include "log_tree_def.h"
 
+#include <sys/wait.h>
+
 #define log(format, ...)   printf(format"\r\n", ##__VA_ARGS__)
 
 void test_ringbuffer()
 {
-    char str[100];
+    uint8_t recivce[4];
+    uint8_t buffer[3];
+    int time = 0;
+    lt_ringbuffer_Init(3);
 
     while(1)
     {
-        scanf("%s", str);
-        lt_ringbuffer_push(str);
-        char casdv = lt_ringbuffer_pop();
-        printf("%s\r\n", casdv);
+        gets(recivce);
 
+
+        for(int i=0;i<3;i++)
+        {
+            lt_ringbuffer_push(recivce[i]);
+        }
+
+        memset(buffer, 0, 4);
+        for(int i=0;i<3;i++)
+        {
+            buffer[i] = lt_ringbuffer_pop();
+        }
+        log("RingBuffer char:%s", buffer);
+
+
+        // while(1);
     }
 
 }
