@@ -8,7 +8,8 @@
 /*=========================================*/
 /*                       private Cropping <stdio.h>                        */
 /*=========================================*/
-//https://blog.csdn.net/plm199513100/article/details/104905990
+// 参考文档
+// https://blog.csdn.net/plm199513100/article/details/104905990
 
 
 
@@ -33,29 +34,29 @@ void lt_ringbuffer_Init(long unsigned int size)
     lt_ringbuffer.write = lt_ringbuffer.buffer;
     lt_ringbuffer.read = lt_ringbuffer.buffer;
 
-    #if RingBuffer_DEBUG
+#if RingBuffer_DEBUG
     printf("RingBuffer address:%lu\r\n", (long unsigned int)buffer);
-    #endif
+#endif
 }
 
 uint32_t lt_ringbuffer_push(uint8_t data)
 {
-    //
+    //检测缓存中是否还有空闲空间
     if(lt_ringbuffer.length == lt_ringbuffer.buffer_size)
     {
         return 1;
     }
 
-    //
+    //写入数据，并记录缓存数据的数量
     *lt_ringbuffer.write =  data;
     lt_ringbuffer.length++;
-    #if RingBuffer_DEBUG
+
+#if RingBuffer_DEBUG
     printf("write data:%c\t", *lt_ringbuffer.write);
     printf("write address:%lu\t", (long unsigned int)lt_ringbuffer.write);
     printf("ringbuffer.length:%lu\r\n", (long unsigned int)lt_ringbuffer.length);
-    #endif
-
-    //
+#endif
+    //移动写指针
     lt_ringbuffer.write++;
     if(lt_ringbuffer.write > ringbuffer_end_address)
     {
@@ -69,22 +70,22 @@ uint8_t lt_ringbuffer_pop(void)
 {
     uint8_t data = 0;
 
-    //
+    // 检测缓存中是否有数据
     if(lt_ringbuffer.length == 0) 
     {
         return 1;
     }
 
-    //
+    // 读取缓存中的数据
     data = *lt_ringbuffer.read;
     lt_ringbuffer.length--;
-    #if RingBuffer_DEBUG
+
+#if RingBuffer_DEBUG
     printf("read data:%c\t", *lt_ringbuffer.read);
     printf("read address:%lu\t", (long unsigned int)lt_ringbuffer.read);
     printf("ringbuffer length:%ld\r\n", lt_ringbuffer.length);
-    #endif
-
-    //
+#endif
+    // 移动读指针
     lt_ringbuffer.read++;
     if(lt_ringbuffer.read > ringbuffer_end_address)
     {
