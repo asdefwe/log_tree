@@ -231,7 +231,10 @@ uint32_t uxListRemove(lg_list_t * const pxList, lg_ListItem_t * const pxItemToRe
 	return pxList->NumberOfItems;
 }
 
-
+uint32_t List_Init(Founction_name_List_t* fnl)
+{
+    vListInitialise(&fnl->list);
+}
 
 
 #ifdef __cplusplus

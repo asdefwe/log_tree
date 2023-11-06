@@ -43,6 +43,9 @@ uint32_t lt_ringbuffer_pop_str(void);
 /*===============================================================*/
 // 借鉴FreeRTOS的列表定义
 
+// 节点最大值
+#define MAX_List	0xFFFFFFFFUL
+
 /*
  | Definition of the only type of object that a list can contain.
  */
@@ -69,9 +72,17 @@ typedef struct
 	lg_MiniListItem_t ListEnd;		/*< List item that contains the maximum possible item value meaning it is always at the end of the list and is therefore used as a marker. */
 }lg_list_t;
 
-// 节点最大值
-#define MAX_List	0xFFFFFFFFUL
+// 最终的结构体
+typedef struct 
+{
+	/* 主要结构体 */
+	lg_list_t list;
 
+	/* 外置接口函数 */
+	
+}Founction_name_List_t;
+
+uint32_t List_Init(Founction_name_List_t* fnl);
 
 
 
