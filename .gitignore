@@ -1,0 +1,12 @@
+log_tree.exe
+log_tree
+
+Makefile
+
+CMakeFiles
+CMakeCache.txt
+cmake_install.cmake
+
+/.vscode
+
+
