@@ -18,7 +18,6 @@ void test_ringbuffer()
     {
         gets(recivce);
 
-
         for(int i=0;i<3;i++)
         {
             lt_ringbuffer_push(recivce[i]);
@@ -31,17 +30,31 @@ void test_ringbuffer()
         }
         log("RingBuffer char:%s", buffer);
 
-
-        // while(1);
     }
 
 }
 
 
+void printf_test()
+{
+    lt_ringbuffer_Init(300);
+
+    int i = 600;
+    char str[] = "evwdv4856ty?123243";
+    float m = 3.1415926;
+    int hex = 0x55FCBD;
+
+    int number = my_printf("!@#$%^%\r\nint:%d\r\nstr:%s\r\nfloat:%f\r\nhex:%x\r\nScientific notation:%e\r\n",
+                                                         i, str, m, hex, m);
+    printf("input number:%d\r\n", number);
+    lt_ringbuffer_pop_str();
+}
+
 void main()
 {
-    test_ringbuffer();
+    // test_ringbuffer();
 
+    printf_test();
 
     // char* test1 = (uint8_t*)malloc(1000);
     // char data1[10] = "abcdefg";
