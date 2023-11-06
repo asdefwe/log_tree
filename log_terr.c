@@ -3,6 +3,9 @@
 #include <string.h>
 
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 
 uint32_t lt_ringbuffer_push_str(uint8_t* str, int size);
@@ -10,9 +13,9 @@ uint32_t lt_ringbuffer_pop_str(void);
 
 
 
-/*=========================================*/
-/*                       private Cropping <stdio.h>                        */
-/*=========================================*/
+/*====================================================*/
+/*            private Cropping <stdio.h>              */
+/*====================================================*/
 // 参考文档
 // https://blog.csdn.net/plm199513100/article/details/104905990
 // https://www.runoob.com/cprogramming/c-function-vsprintf.html
@@ -22,24 +25,24 @@ uint32_t lt_ringbuffer_pop_str(void);
 #include <stdarg.h>
 
 
-char buffer[TX_buffer_size];
+char TX_buffer[TX_buffer_size];
 int my_printf(const char *format, ...) 
 {
     va_list args;
     int count;
 
     va_start(args,format);
-    count = vsnprintf(buffer, TX_buffer_size, format, args);
+    count = vsnprintf(TX_buffer, TX_buffer_size, format, args);
     va_end(args);
 
-    return lt_ringbuffer_push_str(buffer, count);
+    return lt_ringbuffer_push_str(TX_buffer, count);
 }
 
 
 
-/*=========================================*/
-/*                                          ringbuffer                                       */
-/*=========================================*/
+/*====================================================*/
+/*                     ringbuffer                     */
+/*====================================================*/
 #define ringbuffer_end_address  (lt_ringbuffer.buffer + lt_ringbuffer.buffer_size - 1)
 
 log_tree_ringbuffer_t lt_ringbuffer;
@@ -159,3 +162,82 @@ uint32_t lt_ringbuffer_pop_str(void)
 
     return 0;
 }
+
+
+
+
+/*====================================================*/
+/*                       list                         */
+/*====================================================*/
+
+// 初始化列表
+void vListInitialise( lg_list_t * const pxList )
+{
+	/* The list structure contains a list item which is used to mark the
+	end of the list.  To initialise the list the list end is inserted
+	as the only list entry. */
+	pxList->pxIndex = ( lg_ListItem_t * ) &( pxList->ListEnd );			// 初始化列表，并标记尾列表
+
+    pxList->xListEnd.xItemValue = MAX_List;     // 保证尾节点为最大
+
+	/* The list end next and previous pointers point to itself so we know
+	when the list is empty. */
+	pxList->ListEnd.pxNext = ( lg_ListItem_t * ) &( pxList->ListEnd );	 // 通过尾节点定位列表中的首位
+	pxList->ListEnd.pxPrevious = ( lg_ListItem_t * ) &( pxList->ListEnd ); // 通过尾节点定位列表中的尾位
+
+	pxList->NumberOfItems = 0U;     //记录列表中存储的数据
+
+}
+
+// 将新节点插入列表中最后
+void vListInsertEnd(lg_list_t * const pxList, lg_ListItem_t * const pxNewListItem )
+{
+    lg_ListItem_t * const pxIndex = pxList->pxIndex;
+
+	/* Insert a new list item into pxList, but rather than sort the list,
+	makes the new list item the last item to be removed by a call to
+	listGET_OWNER_OF_NEXT_ENTRY(). */
+	pxNewListItem->pxNext = pxIndex;
+	pxNewListItem->pxPrevious = pxIndex->pxPrevious;
+
+	pxIndex->pxPrevious->pxNext = pxNewListItem;
+	pxIndex->pxPrevious = pxNewListItem;
+
+	/* Remember which list the item is in. */
+	pxNewListItem->pvContainer = ( void * ) pxList;
+
+	( pxList->NumberOfItems )++;
+}
+
+// 移除指定节点
+uint32_t uxListRemove(lg_list_t * const pxList, lg_ListItem_t * const pxItemToRemove )
+{
+    /* 原逻辑是通过被移除的节点找到主列表
+     | 现结构提不包含该指针，函数多传入一个参数代替
+    */
+    List_t * const pxList = pxList->pxIndex;
+
+	pxItemToRemove->pxNext->pxPrevious = pxItemToRemove->pxPrevious;
+	pxItemToRemove->pxPrevious->pxNext = pxItemToRemove->pxNext;
+
+	/* Make sure the index is left pointing to a valid item. */
+	if( pxList->pxIndex == pxItemToRemove )
+	{
+		pxList->pxIndex = pxItemToRemove->pxPrevious;
+	}
+
+	( pxList->NumberOfItems )--;
+
+	return pxList->NumberOfItems;
+}
+
+
+
+
+#ifdef __cplusplus
+}
+#endif
+
+
+
+
