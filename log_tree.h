@@ -7,6 +7,8 @@
 
 /*=========== log tree setting over ===========*/ 
 
+#define TX_buffer_size 80
+#define RX_buffer_size  124
 
 
 #define lt_sucess	0
@@ -25,11 +27,13 @@
 
 #endif
 
-
+int my_printf(const char *format, ...) ;
 
 void lt_ringbuffer_Init(long unsigned int size);
 uint32_t lt_ringbuffer_push(uint8_t data);
 uint8_t lt_ringbuffer_pop(void);
+uint32_t lt_ringbuffer_push_str(uint8_t* str, int size);
+uint32_t lt_ringbuffer_pop_str(void);
 
 #endif
 
