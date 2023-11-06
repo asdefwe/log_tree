@@ -1,6 +1,12 @@
 #ifndef __LOG_TREE_H
 #define __LOG_TREE_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+
+
 /*=========== log tree setting ===========*/ 
 #define USE_std 1
 
@@ -27,13 +33,17 @@
 
 #endif
 
-int my_printf(const char *format, ...) ;
+int my_printf(const uint8_t *format, ...);
 
-void lt_ringbuffer_Init(long unsigned int size);
-uint32_t lt_ringbuffer_push(uint8_t data);
-uint8_t lt_ringbuffer_pop(void);
-uint32_t lt_ringbuffer_push_str(uint8_t* str, int size);
-uint32_t lt_ringbuffer_pop_str(void);
+
+
+
+
+
+#ifdef __cplusplus
+}
+#endif
+
 
 #endif
 
