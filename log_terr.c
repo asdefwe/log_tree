@@ -26,7 +26,7 @@ uint32_t lt_ringbuffer_pop_str(void);
 
 
 char TX_buffer[TX_buffer_size];
-int my_printf(const char *format, ...) 
+int my_printf(const uint8_t *format, ...) 
 {
     va_list args;
     int count;
@@ -176,14 +176,12 @@ void vListInitialise( lg_list_t * const pxList )
 	/* The list structure contains a list item which is used to mark the
 	end of the list.  To initialise the list the list end is inserted
 	as the only list entry. */
-	pxList->pxIndex = ( lg_ListItem_t * ) &( pxList->ListEnd );			// 初始化列表，并标记尾列表
-
-    pxList->xListEnd.xItemValue = MAX_List;     // 保证尾节点为最大
+	pxList->pxIndex = (lg_ListItem_t*) &( pxList->ListEnd );			// 初始化列表，并标记尾列表
 
 	/* The list end next and previous pointers point to itself so we know
 	when the list is empty. */
-	pxList->ListEnd.pxNext = ( lg_ListItem_t * ) &( pxList->ListEnd );	 // 通过尾节点定位列表中的首位
-	pxList->ListEnd.pxPrevious = ( lg_ListItem_t * ) &( pxList->ListEnd ); // 通过尾节点定位列表中的尾位
+	pxList->ListEnd.pxNext = (lg_ListItem_t*) &( pxList->ListEnd );	 // 通过尾节点定位列表中的首位
+	pxList->ListEnd.pxPrevious = (lg_ListItem_t*) &( pxList->ListEnd ); // 通过尾节点定位列表中的尾位
 
 	pxList->NumberOfItems = 0U;     //记录列表中存储的数据
 
@@ -193,18 +191,16 @@ void vListInitialise( lg_list_t * const pxList )
 void vListInsertEnd(lg_list_t * const pxList, lg_ListItem_t * const pxNewListItem )
 {
     lg_ListItem_t * const pxIndex = pxList->pxIndex;
+    lg_MiniListItem_t* const ListEnd = &pxList->ListEnd;
 
 	/* Insert a new list item into pxList, but rather than sort the list,
 	makes the new list item the last item to be removed by a call to
 	listGET_OWNER_OF_NEXT_ENTRY(). */
-	pxNewListItem->pxNext = pxIndex;
-	pxNewListItem->pxPrevious = pxIndex->pxPrevious;
+	pxNewListItem->pxNext = pxIndex->pxPrevious;;
+	pxNewListItem->pxPrevious = ListEnd->pxPrevious;
 
-	pxIndex->pxPrevious->pxNext = pxNewListItem;
-	pxIndex->pxPrevious = pxNewListItem;
-
-	/* Remember which list the item is in. */
-	pxNewListItem->pvContainer = ( void * ) pxList;
+	ListEnd->pxNext= pxIndex;
+	ListEnd->pxPrevious = pxNewListItem;
 
 	( pxList->NumberOfItems )++;
 }

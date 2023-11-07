@@ -51,17 +51,15 @@ uint32_t lt_ringbuffer_pop_str(void);
  */
 typedef struct 
 {
-	uint32_t	xItemValue;				// 量化节点位置
-	struct xLIST_ITEM*  pxNext;			/*< Pointer to the next ListItem_t in the list. */
-	struct xLIST_ITEM*  pxPrevious;		/*< Pointer to the previous ListItem_t in the list. */
+	struct lg_ListItem_t*  pxNext;			/*<  指向列表中下一个ListItem_t的指针。  */
+	struct lg_ListItem_t*  pxPrevious;		/*<  指向列表中上一个ListItem_t的指针。  */
 	void * pvOwner;						/*< Pointer to the object (normally a TCB) that contains the list item.  There is therefore a two way link between the object containing the list item and the list item itself. */
 }lg_ListItem_t;
 
 typedef struct 
 {					
-	uint32_t	xItemValue;				// 量化节点位置
-	struct xLIST_ITEM*  pxNext;			// 下一个节点
-	struct xLIST_ITEM*  pxPrevious;		// 上一个节点
+	struct lg_ListItem_t*  pxNext;			// 下一个节点
+	struct lg_ListItem_t*  pxPrevious;		// 上一个节点
 }lg_MiniListItem_t;
 
 
@@ -79,9 +77,9 @@ typedef struct
 	lg_list_t list;
 
 	/* 外置接口函数 */
-	void (*Init)(Founction_name_List_t* fnl);
+	void (*Init)(lg_list_t * const pxList );
 	void (*InsertEnd)(lg_list_t* const pxList, lg_ListItem_t* const pxNewListItem);
-	uint32_t (*Remove)(lg_list_t* const pxList, lg_ListItem_t* const pxItemToRemove)
+	uint32_t (*Remove)(lg_list_t* const pxList, lg_ListItem_t* const pxItemToRemove);
 }Founction_name_List_t;
 
 uint32_t List_Init(Founction_name_List_t* fnl);
