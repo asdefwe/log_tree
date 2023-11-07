@@ -126,7 +126,7 @@ uint8_t lt_ringbuffer_pop(void)
 
 uint32_t lt_ringbuffer_push_str(uint8_t* str, int size)
 {
-    uint32_t    i = 0;
+    uint32_t i = 0;
 
     do
     {
@@ -233,7 +233,11 @@ uint32_t uxListRemove(lg_list_t * const pxList, lg_ListItem_t * const pxItemToRe
 
 uint32_t List_Init(Founction_name_List_t* fnl)
 {
-    vListInitialise(&fnl->list);
+    fnl->Init = vListInitialise;
+    fnl->InsertEnd = vListInsertEnd;
+    fnl->Remove = uxListRemove;
+
+    return 0;
 }
 
 
