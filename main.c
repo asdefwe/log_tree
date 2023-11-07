@@ -50,11 +50,20 @@ void printf_test()
     lt_ringbuffer_pop_str();
 }
 
+
+void list_test()
+{
+    Founction_name_List_t fml;
+    List_Init(&fml);
+
+    fml.Init(&fml.list);
+}
+
 void main()
 {
     // test_ringbuffer();
 
-    printf_test();
+    // printf_test();
 
     // char* test1 = (uint8_t*)malloc(1000);
     // char data1[10] = "abcdefg";
