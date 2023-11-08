@@ -24,7 +24,7 @@ extern "C" {
 #define RingBuffer_DEBUG 0
 
 #if RingBuffer_DEBUG
-#include <stdio.h>
+
 #endif
 // 
 #if USE_std

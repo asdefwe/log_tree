@@ -53,10 +53,21 @@ void printf_test()
 
 void list_test()
 {
-    Founction_name_List_t fml;
-    List_Init(&fml);
+    printf("list_test \r\n");
+    Founction_name_List_t fnl;
+    List_Init(&fnl);
 
-    fml.Init(&fml.list);
+    fnl.UpdataList(&fnl.list, "founction1");
+    fnl.printList(&fnl.list);
+
+    fnl.UpdataList(&fnl.list, "founction2");
+    fnl.printList(&fnl.list);
+
+    fnl.UpdataList(&fnl.list, "founction3");
+    fnl.printList(&fnl.list);
+
+    fnl.UpdataList(&fnl.list, "founction2");
+    fnl.printList(&fnl.list);
 }
 
 void main()
@@ -64,6 +75,8 @@ void main()
     // test_ringbuffer();
 
     // printf_test();
+
+    list_test();
 
     // char* test1 = (uint8_t*)malloc(1000);
     // char data1[10] = "abcdefg";

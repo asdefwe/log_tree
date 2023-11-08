@@ -77,9 +77,8 @@ typedef struct
 	lg_list_t list;
 
 	/* 外置接口函数 */
-	void (*Init)(lg_list_t * const pxList );
-	void (*InsertEnd)(lg_list_t* const pxList, lg_ListItem_t* const pxNewListItem);
-	uint32_t (*Remove)(lg_list_t* const pxList, lg_ListItem_t* const pxItemToRemove);
+	uint32_t (*UpdataList)(lg_list_t* Fnl, char* FounctionName);
+	void (*printList)(lg_list_t* list);
 }Founction_name_List_t;
 
 uint32_t List_Init(Founction_name_List_t* fnl);

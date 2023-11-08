@@ -1,5 +1,7 @@
 #include "log_tree_def.h"
 #include "log_tree.h"
+
+#include <stdio.h>
 #include <string.h>
 
 
@@ -176,12 +178,12 @@ void vListInitialise( lg_list_t * const pxList )
 	/* The list structure contains a list item which is used to mark the
 	end of the list.  To initialise the list the list end is inserted
 	as the only list entry. */
-	pxList->pxIndex = (lg_ListItem_t*) &( pxList->ListEnd );			// 初始化列表，并标记尾列表
+	pxList->pxIndex = (void*) &( pxList->ListEnd );			// 初始化列表，并标记尾列表
 
 	/* The list end next and previous pointers point to itself so we know
 	when the list is empty. */
-	pxList->ListEnd.pxNext = (lg_ListItem_t*) &( pxList->ListEnd );	 // 通过尾节点定位列表中的首位
-	pxList->ListEnd.pxPrevious = (lg_ListItem_t*) &( pxList->ListEnd ); // 通过尾节点定位列表中的尾位
+	pxList->ListEnd.pxNext = (void*) &( pxList->ListEnd );	 // 通过尾节点定位列表中的首位
+	pxList->ListEnd.pxPrevious = (void*) &( pxList->ListEnd ); // 通过尾节点定位列表中的尾位
 
 	pxList->NumberOfItems = 0U;     //记录列表中存储的数据
 
@@ -191,16 +193,16 @@ void vListInitialise( lg_list_t * const pxList )
 void vListInsertEnd(lg_list_t * const pxList, lg_ListItem_t * const pxNewListItem )
 {
     lg_ListItem_t * const pxIndex = pxList->pxIndex;
-    lg_MiniListItem_t* const ListEnd = &pxList->ListEnd;
+    lg_ListItem_t * const ListEndItem = (void *)pxList->pxIndex->pxPrevious;
 
 	/* Insert a new list item into pxList, but rather than sort the list,
 	makes the new list item the last item to be removed by a call to
 	listGET_OWNER_OF_NEXT_ENTRY(). */
-	pxNewListItem->pxNext = pxIndex->pxPrevious;;
-	pxNewListItem->pxPrevious = ListEnd->pxPrevious;
+	pxNewListItem->pxNext = (void *)pxIndex;
+	pxNewListItem->pxPrevious = pxList->ListEnd.pxPrevious;
 
-	ListEnd->pxNext= pxIndex;
-	ListEnd->pxPrevious = pxNewListItem;
+    ListEndItem->pxNext = (void *)pxIndex;
+	pxIndex->pxPrevious = (void *)pxNewListItem;
 
 	( pxList->NumberOfItems )++;
 }
@@ -211,15 +213,16 @@ uint32_t uxListRemove(lg_list_t * const pxList, lg_ListItem_t * const pxItemToRe
     /* 原逻辑是通过被移除的节点找到主列表
      | 现结构提不包含该指针，函数多传入一个参数代替
     */
-    List_t * const pxList = pxList->pxIndex;
+   lg_ListItem_t* ItemToRemoveNext = (lg_ListItem_t*)pxItemToRemove->pxNext;
+   lg_ListItem_t* ItemToRemovePrevious = (lg_ListItem_t*)pxItemToRemove->pxPrevious;
 
-	pxItemToRemove->pxNext->pxPrevious = pxItemToRemove->pxPrevious;
-	pxItemToRemove->pxPrevious->pxNext = pxItemToRemove->pxNext;
+	ItemToRemoveNext->pxPrevious = pxItemToRemove->pxPrevious;
+	ItemToRemovePrevious->pxNext = pxItemToRemove->pxNext;
 
 	/* Make sure the index is left pointing to a valid item. */
 	if( pxList->pxIndex == pxItemToRemove )
 	{
-		pxList->pxIndex = pxItemToRemove->pxPrevious;
+		pxList->pxIndex = ItemToRemovePrevious;
 	}
 
 	( pxList->NumberOfItems )--;
@@ -227,14 +230,61 @@ uint32_t uxListRemove(lg_list_t * const pxList, lg_ListItem_t * const pxItemToRe
 	return pxList->NumberOfItems;
 }
 
-uint32_t List_Init(Founction_name_List_t* fnl)
+uint32_t InsertOrRemove(lg_list_t* list, char* FounctionName)
 {
-    fnl->Init = vListInitialise;
-    fnl->InsertEnd = vListInsertEnd;
-    fnl->Remove = uxListRemove;
+    uint8_t Number = 0;
+    lg_ListItem_t * pxIterator = NULL;
+    lg_ListItem_t * const ListEndItem = (void*)list->ListEnd.pxPrevious;
+    uint8_t NameSize = sizeof(FounctionName);
+
+    for(pxIterator = ListEndItem; Number < list->NumberOfItems; pxIterator = (void*)pxIterator->pxNext)
+    {
+        Number++;
+        if(memcmp(FounctionName, pxIterator->pvOwner, NameSize) == 0) 
+        {
+            goto del;
+        }  
+    }
+
+    /* 申请新链表的存储空间 */
+    lg_ListItem_t* NewListItem = (lg_ListItem_t*)calloc(12, sizeof(char));
+    NewListItem->pvOwner = (char*)calloc(NameSize, sizeof(char));
+    memcpy(NewListItem->pvOwner, FounctionName, NameSize);
+    vListInsertEnd(list, NewListItem);
+
+    return 0;
+
+del:
+    for(pxIterator = ListEndItem; Number > 0; pxIterator = (void*)pxIterator->pxNext)
+    {
+        Number--;
+        uxListRemove(list, NewListItem);
+    }
+    return 0;
+}
+
+void PrintList(lg_list_t* list)
+{
+    uint8_t Number = 0;
+    lg_ListItem_t * pxIterator = NULL;
+    lg_ListItem_t * const ListEndItem = (void*)list->ListEnd.pxPrevious;
+
+    for(pxIterator = ListEndItem; Number > list->NumberOfItems; pxIterator = (void*)pxIterator->pxNext)
+    {
+        printf("[%s]\r\n", (char*)(list->pxIndex->pvOwner));
+    }
+}
+
+uint32_t List_Init(Founction_name_List_t* Fnl)
+{
+    vListInitialise(&Fnl->list);
+
+    Fnl->UpdataList = InsertOrRemove;
+    Fnl->printList = PrintList;
 
     return 0;
 }
+
 
 
 #ifdef __cplusplus
