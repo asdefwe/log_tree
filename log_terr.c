@@ -193,16 +193,16 @@ void vListInitialise( lg_list_t * const pxList )
 void vListInsertEnd(lg_list_t * const pxList, lg_ListItem_t * const pxNewListItem )
 {
     lg_ListItem_t * const pxIndex = pxList->pxIndex;
-    lg_ListItem_t * const ListEndItem = (void *)pxList->pxIndex->pxPrevious;
+    lg_ListItem_t * const ListEndItem = pxIndex->pxPrevious;
 
 	/* Insert a new list item into pxList, but rather than sort the list,
 	makes the new list item the last item to be removed by a call to
 	listGET_OWNER_OF_NEXT_ENTRY(). */
 	pxNewListItem->pxNext = (void *)pxIndex;
-	pxNewListItem->pxPrevious = pxList->ListEnd.pxPrevious;
+	pxNewListItem->pxPrevious = pxIndex->pxPrevious;
 
-    ListEndItem->pxNext = (void *)pxIndex;
-	pxIndex->pxPrevious = (void *)pxNewListItem;
+    ListEndItem->pxNext = pxNewListItem;
+	pxIndex->pxPrevious = pxNewListItem;
 
 	( pxList->NumberOfItems )++;
 }
@@ -235,7 +235,9 @@ uint32_t InsertOrRemove(lg_list_t* list, char* FounctionName)
     uint8_t Number = 0;
     lg_ListItem_t * pxIterator = NULL;
     lg_ListItem_t * const ListEndItem = (void*)list->ListEnd.pxPrevious;
-    uint8_t NameSize = sizeof(FounctionName);
+    uint8_t NameSize = strlen(FounctionName);
+
+    printf("[%d]%d FounctionName:%s\r\n", __LINE__, NameSize, FounctionName);
 
     for(pxIterator = ListEndItem; Number < list->NumberOfItems; pxIterator = (void*)pxIterator->pxNext)
     {
@@ -246,12 +248,15 @@ uint32_t InsertOrRemove(lg_list_t* list, char* FounctionName)
         }  
     }
 
-    /* 申请新链表的存储空间 */
-    lg_ListItem_t* NewListItem = (lg_ListItem_t*)calloc(12, sizeof(char));
-    NewListItem->pvOwner = (char*)calloc(NameSize, sizeof(char));
-    memcpy(NewListItem->pvOwner, FounctionName, NameSize);
-    vListInsertEnd(list, NewListItem);
+    printf("[%s]List save\r\n", __func__);
 
+    /* 申请新链表的存储空间 */
+    lg_ListItem_t* NewListItem = (lg_ListItem_t*)calloc(12, sizeof(uint8_t));
+    NewListItem->pvOwner = (char*)calloc(NameSize, sizeof(uint8_t));
+    memcpy(NewListItem->pvOwner, FounctionName, NameSize);
+    printf("[%d][%s]NewListItem->pvOwner:%s\r\n", __LINE__, __func__, NewListItem->pvOwner);
+    vListInsertEnd(list, NewListItem);
+    printf("[%d][%s]NewListItem->pvOwner:%s\r\n", __LINE__, __func__, NewListItem->pvOwner);
     return 0;
 
 del:
@@ -269,8 +274,9 @@ void PrintList(lg_list_t* list)
     lg_ListItem_t * pxIterator = NULL;
     lg_ListItem_t * const ListEndItem = (void*)list->ListEnd.pxPrevious;
 
-    for(pxIterator = ListEndItem; Number > list->NumberOfItems; pxIterator = (void*)pxIterator->pxNext)
+    for(pxIterator = ListEndItem; Number < list->NumberOfItems; pxIterator = (void*)pxIterator->pxPrevious)
     {
+        Number++;
         printf("[%s]\r\n", (char*)(list->pxIndex->pvOwner));
     }
 }
