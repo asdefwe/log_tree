@@ -53,20 +53,55 @@ void printf_test()
 
 void list_test()
 {
+    printf("======list strcut test======\r\n");
+    lg_list_t   List;
+
+    vListInitialise(&List);
+
+    lg_ListItem_t * Item1 = calloc(3*4, 1);
+
+    uint8_t str1[] = "Founction";
+    uint8_t CharNumber = sizeof(str1);
+    printf("str1 size:%d\r\n", CharNumber);
+
+    // 为列表中的数据申请空间
+    Item1->pvOwner = calloc(CharNumber, sizeof(uint8_t));
+    memcpy(Item1->pvOwner, str1, CharNumber);
+    printf("Item1->pvOwner:%s\r\n", (char*)Item1->pvOwner);
+    printf("----------------------------\r\n");
+
+    vListInsertEnd(&List, Item1);
+
+    uint8_t Number = 0;
+    lg_ListItem_t * pxIterator = NULL;
+    lg_ListItem_t * const ListEndItem = (void*)List.ListEnd.pxPrevious;
+
+    printf("List NumberOfItems:%d\r\n", List.NumberOfItems);
+    for(pxIterator = ListEndItem; Number < List.NumberOfItems; pxIterator = (void*)pxIterator->pxPrevious)
+    {
+        Number++;
+        printf("[%d][%s]\r\n",Number ,(char*)(pxIterator->pvOwner));
+    }
+    printf("============================\r\n");
+
     printf("list_test \r\n");
     Founction_name_List_t fnl;
     List_Init(&fnl);
 
     fnl.UpdataList(&fnl.list, "founction1");
+    printf("fnl.list.NumberOfItems:%d\r\n", fnl.list.NumberOfItems);
     fnl.printList(&fnl.list);
 
     fnl.UpdataList(&fnl.list, "founction2");
+    printf("fnl.list.NumberOfItems:%d\r\n", fnl.list.NumberOfItems);
     fnl.printList(&fnl.list);
 
     fnl.UpdataList(&fnl.list, "founction3");
+    printf("fnl.list.NumberOfItems:%d\r\n", fnl.list.NumberOfItems);
     fnl.printList(&fnl.list);
 
     fnl.UpdataList(&fnl.list, "founction2");
+    printf("fnl.list.NumberOfItems:%d\r\n", fnl.list.NumberOfItems);
     fnl.printList(&fnl.list);
 }
 
