@@ -132,11 +132,12 @@ typedef struct
 
 typedef struct 
 {
-	lt_SingleRowFormat_t 		SingleRowFormat;
-	lt_MultipleLineFormat_t		MultipleLineFormat;
-	lg_list_t FunctionName;
-	uint8_t	isbegin;
-	log_tree_ringbuffer_p log_buff;
+	lt_SingleRowFormat_t 		SingleRowFormat;		//单行格式
+	lt_MultipleLineFormat_t		MultipleLineFormat;		//多行间格式
+	Founction_name_List_t 		fnl;					//函数名列表
+	log_tree_ringbuffer_p 		log_buff;				//输出缓存		
+	uint8_t	isbegin;		
+	
 }lt_core_t;
 
 
