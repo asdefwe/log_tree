@@ -193,7 +193,7 @@ void vListInitialise( lg_list_t * const pxList )
 void vListInsertEnd(lg_list_t * const pxList, lg_ListItem_t * const pxNewListItem )
 {
     lg_ListItem_t * const pxIndex = pxList->pxIndex;
-    lg_ListItem_t * const ListEndItem = pxIndex->pxPrevious;
+    lg_ListItem_t * const ListEndItem = (void*)pxIndex->pxPrevious;
 
 	/* Insert a new list item into pxList, but rather than sort the list,
 	makes the new list item the last item to be removed by a call to
@@ -201,8 +201,8 @@ void vListInsertEnd(lg_list_t * const pxList, lg_ListItem_t * const pxNewListIte
 	pxNewListItem->pxNext = (void *)pxIndex;
 	pxNewListItem->pxPrevious = pxIndex->pxPrevious;
 
-    ListEndItem->pxNext = pxNewListItem;
-	pxIndex->pxPrevious = pxNewListItem;
+    ListEndItem->pxNext = (void*)pxNewListItem;
+	pxIndex->pxPrevious = (void*)pxNewListItem;
 
 	( pxList->NumberOfItems )++;
 }
@@ -224,7 +224,6 @@ uint32_t uxListRemove(lg_list_t * const pxList, lg_ListItem_t * const pxItemToRe
 	{
 		pxList->pxIndex = ItemToRemovePrevious;
 	}
-
 	( pxList->NumberOfItems )--;
 
 	return pxList->NumberOfItems;
@@ -237,33 +236,29 @@ uint32_t InsertOrRemove(lg_list_t* list, char* FounctionName)
     lg_ListItem_t * const ListEndItem = (void*)list->ListEnd.pxPrevious;
     uint8_t NameSize = strlen(FounctionName);
 
-    printf("[%d]%d FounctionName:%s\r\n", __LINE__, NameSize, FounctionName);
-
-    for(pxIterator = ListEndItem; Number < list->NumberOfItems; pxIterator = (void*)pxIterator->pxNext)
+    for(pxIterator = ListEndItem; Number < list->NumberOfItems; pxIterator = (void*)pxIterator->pxPrevious)
     {
-        Number++;
-        if(memcmp(FounctionName, pxIterator->pvOwner, NameSize) == 0) 
+        if(memcmp(pxIterator->pvOwner, FounctionName, NameSize) == 0) 
         {
             goto del;
         }  
+        Number++;
     }
-
-    printf("[%s]List save\r\n", __func__);
 
     /* 申请新链表的存储空间 */
     lg_ListItem_t* NewListItem = (lg_ListItem_t*)calloc(12, sizeof(uint8_t));
     NewListItem->pvOwner = (char*)calloc(NameSize, sizeof(uint8_t));
     memcpy(NewListItem->pvOwner, FounctionName, NameSize);
-    printf("[%d][%s]NewListItem->pvOwner:%s\r\n", __LINE__, __func__, NewListItem->pvOwner);
     vListInsertEnd(list, NewListItem);
-    printf("[%d][%s]NewListItem->pvOwner:%s\r\n", __LINE__, __func__, NewListItem->pvOwner);
     return 0;
 
 del:
     for(pxIterator = ListEndItem; Number > 0; pxIterator = (void*)pxIterator->pxNext)
     {
         Number--;
-        uxListRemove(list, NewListItem);
+        uxListRemove(list, pxIterator);
+        free(pxIterator->pvOwner);
+        free(pxIterator);
     }
     return 0;
 }
@@ -272,12 +267,12 @@ void PrintList(lg_list_t* list)
 {
     uint8_t Number = 0;
     lg_ListItem_t * pxIterator = NULL;
-    lg_ListItem_t * const ListEndItem = (void*)list->ListEnd.pxPrevious;
+    lg_ListItem_t * const ListEndItem = (void*)list->ListEnd.pxNext;
 
-    for(pxIterator = ListEndItem; Number < list->NumberOfItems; pxIterator = (void*)pxIterator->pxPrevious)
+    for(pxIterator = ListEndItem; Number < list->NumberOfItems; pxIterator = (void*)pxIterator->pxNext)
     {
         Number++;
-        printf("[%s]\r\n", (char*)(list->pxIndex->pvOwner));
+        printf("[%d] %s\r\n", Number, (char*)(pxIterator->pvOwner));
     }
 }
 
