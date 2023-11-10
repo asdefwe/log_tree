@@ -9,5 +9,5 @@ cmake_install.cmake
 
 /.vscode
 
-
-document/.$log_tree——list.drawio.bkp
+*.dtmp
+*.bkp
