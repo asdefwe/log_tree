@@ -6,6 +6,10 @@ extern "C" {
 #endif
 
 
+/* 
+ |  编译器必须是C99标准以上
+*/
+
 
 /*=========== log tree setting ===========*/ 
 #define USE_std 1
@@ -13,7 +17,7 @@ extern "C" {
 
 /*=========== log tree setting over ===========*/ 
 
-#define TX_buffer_size 80
+#define TX_buffer_size  256
 #define RX_buffer_size  124
 
 

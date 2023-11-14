@@ -29,6 +29,7 @@ typedef struct{
 	uint64_t 	length;
 	uint8_t* 	read;
 	uint8_t* 	write;
+
 }log_tree_ringbuffer_t, *log_tree_ringbuffer_p;
 
 void lt_ringbuffer_Init(long unsigned int size);
@@ -54,12 +55,14 @@ typedef struct
 	struct lg_ListItem_t*  pxNext;			/*<  指向列表中下一个ListItem_t的指针。  */
 	struct lg_ListItem_t*  pxPrevious;		/*<  指向列表中上一个ListItem_t的指针。  */
 	void * pvOwner;						/*< Pointer to the object (normally a TCB) that contains the list item.  There is therefore a two way link between the object containing the list item and the list item itself. */
+
 }lg_ListItem_t;
 
 typedef struct 
 {					
 	struct lg_ListItem_t*  pxNext;			// 下一个节点
 	struct lg_ListItem_t*  pxPrevious;		// 上一个节点
+
 }lg_MiniListItem_t;
 
 
@@ -68,6 +71,7 @@ typedef struct
 	uint32_t	NumberOfItems;		// 列表中成员的数量
 	lg_ListItem_t* 	pxIndex;		/*< Used to walk through the list */
 	lg_MiniListItem_t ListEnd;		/*< List item that contains the maximum possible item value meaning it is always at the end of the list and is therefore used as a marker. */
+
 }lg_list_t;
 
 // 最终的结构体
@@ -79,6 +83,7 @@ typedef struct
 	/* 外置接口函数 */
 	uint32_t (*UpdataList)(lg_list_t* Fnl, char* FounctionName);
 	void (*printList)(lg_list_t* list);
+
 }Founction_name_List_t;
 
 uint32_t List_Init(Founction_name_List_t* fnl);
@@ -107,33 +112,37 @@ typedef struct
 	uint8_t function;				//是否显示函数名
 	uint8_t	line;					//是否显示代码行数
 	uint8_t	Interval_format;	 	//与输出内容的间隔格式
+
 }lt_SingleRowFormat_t;
 
-/*
- |	[function1] log_tree begin
- | 		|--[function2] fbbdfbdfbdfbdfb
- | 		|     |--[function3] iwqqwe568941
- | 		|     |     |--[function4] 489516qwd
- | 		|--[funciton2] dqw4896156
- | 		|--[funciton2] 4615wdxvc489
- |    ↑ ↑ ↑      ↑
- |	  | | |    次级次级缩进格式
- |    | | 次级缩进长度
- |    | 次级缩进格式
- |   首行缩进长度
+/*				   ===========================================
+ |				   ||[function1] log_tree begin		        ||        
+ | 首行缩进格式-->  ||  |--[function2] fbbdfbdfbdfbdfb       ||            
+ | 				   ||  |     |--[function3] iwqqwe568941    ||        
+ | 				   ||  |     |     |--[function4] 489516qwd ||        	
+ | 				   ||  |--[funciton2] dqw4896156            ||       
+ | 				   ||  |--[funciton2] 4615wdxvc489          ||  
+ |                 ===========================================       
+ |  			     ↑ ↑ ↑      ↑
+ |				     | | |    次级次级缩进格式
+ |  			     | | 次级缩进长度
+ |  			     | 次级缩进格式
+ |  			    首行缩进长度
  */
 typedef struct 
 {
+	uint8_t FirstTextIndent_format;					//首行缩进格式
 	uint8_t FirstTextIndent_length;					//首行缩进长度
 	uint8_t	SecondaryTextIndent_format;				//次级缩进格式
 	uint8_t	SecondaryTextIndent_length;				//次级缩进长度
 	uint8_t	SecondarySecondaryTextIndent_format;	//次级次级缩进格式
-}lt_MultipleLineFormat_t;
+
+}lt_MultipleRowFormat_t;
 
 typedef struct 
 {
 	lt_SingleRowFormat_t 		SingleRowFormat;		//单行格式
-	lt_MultipleLineFormat_t		MultipleLineFormat;		//多行间格式
+	lt_MultipleRowFormat_t		MultipleRowFormat;		//多行间格式
 	Founction_name_List_t 		fnl;					//函数名列表
 	log_tree_ringbuffer_p 		log_buff;				//输出缓存		
 	uint8_t	isbegin;		
@@ -149,7 +158,17 @@ typedef struct
 
 
 
-
+#define lt_Default_Setting {
+	.SingleRowFormat.filename = FALSE;									\
+	.SingleRowFormat.function = TRUE;									\
+	.SingleRowFormat.line = FALSE;										\
+	.SingleRowFormat.Interval_format = " ";								\
+	.MultipleRowFormat.FirstTextIndent_format = " ";					\
+	.MultipleRowFormat.FirstTextIndent_length = 2;						\
+	.MultipleRowFormat.SecondaryTextIndent_format = "|";				\
+	.MultipleRowFormat.SecondaryTextIndent_length = 2;					\
+	.MultipleRowFormat.SecondarySecondaryTextIndent_format = " ";		\
+}
 
 
 

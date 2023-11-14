@@ -27,18 +27,7 @@ uint32_t lt_ringbuffer_pop_str(void);
 #include <stdarg.h>
 
 
-char TX_buffer[TX_buffer_size];
-int my_printf(const uint8_t *format, ...) 
-{
-    va_list args;
-    int count;
 
-    va_start(args,format);
-    count = vsnprintf(TX_buffer, TX_buffer_size, format, args);
-    va_end(args);
-
-    return lt_ringbuffer_push_str(TX_buffer, count);
-}
 
 
 
@@ -229,6 +218,9 @@ uint32_t uxListRemove(lg_list_t * const pxList, lg_ListItem_t * const pxItemToRe
 	return pxList->NumberOfItems;
 }
 
+// 函  数：将元素插入列表或从列表中删除
+// 参  数：列表指针  函数名
+// 返回值：2-插入数据   1-无操作   0-删除数据
 uint32_t InsertOrRemove(lg_list_t* list, char* FounctionName)
 {
     uint8_t Number = 0;
@@ -250,9 +242,11 @@ uint32_t InsertOrRemove(lg_list_t* list, char* FounctionName)
     NewListItem->pvOwner = (char*)calloc(NameSize, sizeof(uint8_t));
     memcpy(NewListItem->pvOwner, FounctionName, NameSize);
     vListInsertEnd(list, NewListItem);
-    return 0;
+    return 1;
 
 del:
+    if(number == 0) return 1;
+
     for(pxIterator = ListEndItem; Number > 0; pxIterator = (void*)pxIterator->pxNext)
     {
         Number--;
@@ -285,6 +279,185 @@ uint32_t List_Init(Founction_name_List_t* Fnl)
 
     return 0;
 }
+
+
+
+
+
+
+
+
+/*===============================================================*/
+/*                        log tree kernel                        */
+/*===============================================================*/
+
+
+
+
+#define lg_Print(lt_core_t lt, format, ...)
+{
+    my_printf(lt, __FILE__, __func__, __LINE__, format, ##__VA_ARGS__);
+}
+
+
+void AddSingleRowFormat(lt_core_t lt,
+                        const uint8_t* flie, const uint8_t* func, const uint8_t* line,
+                        uint8_t* str)
+{
+    if(lt.SingleRowFormat.filename == TRUE)
+    {
+        if(lt.SingleRowFormat.function == TRUE)
+        {
+            if(lt.SingleRowFormat.line == TRUE)
+            {
+                sprintf(str, "[%s][%s][%d]", flie, func, line);
+            }
+            else
+            {
+                sprintf(str, "[%s][%d]", flie, line);
+            }
+        }
+        else
+        {
+            if(lt.SingleRowFormat.function == FALSE)
+            {
+                sprintf(str, "[%s][%s]", flie, func);
+            }
+            else
+            {
+                sprintf(str, "[%s][%s]", flie, func);
+            }
+        }
+
+    }
+    else
+    {
+        if(lt.SingleRowFormat.function == TRUE)
+        {
+            if(lt.SingleRowFormat.line == TRUE)
+            {
+                sprintf(str, "[%s][%d]", func, line);
+            }
+            else
+            {
+                sprintf(str, "[%s]", flie);
+            }
+        }
+        else
+        {
+            if(lt.SingleRowFormat.line == TRUE)
+            {
+                sprintf(str, "[%d]", line);
+            }
+        }
+    }
+}   
+
+//添加        “  |”
+void AddMultipleRowFormat_start(lt_core_t lt, uint8_t* str)
+{ 
+    memcpy(str, 
+           lt.MultipleRowFormat.FirstTextIndent_format, 
+           lt.MultipleRowFormat.FirstTextIndent_length);
+    
+    memcpy(str + 1, 
+           lt.MultipleRowFormat.SecondaryTextIndent_format, 
+           1);
+}
+
+//添加      “   ”
+void AddMultipleRowFormat_middle(lt_core_t lt, uint8_t* str)
+{
+    memcpy(str, 
+           lt.MultipleRowFormat.SecondarySecondaryTextIndent_format,
+           5);
+}
+
+//添加      “--”
+void AddMultipleRowFormat_end(lt_core_t lt, uint8_t* str)
+{
+    memcpy(str, 
+           lt.MultipleRowFormat.SecondaryTextIndent_format, 
+           lt.MultipleRowFormat.SecondaryTextIndent_length);
+}
+
+
+char TX_buffer[TX_buffer_size];
+int my_printf(lt_core_t lt,
+              const uint8_t* flie, const uint8_t* func, const uint8_t* line,
+              const uint8_t *format, ...) 
+{
+    va_list args;
+    int count;
+    int res;
+
+    memset(TX_buffer, 0, TX_buffer_size);
+
+    res = lt.fnl.UpdataList(&lt.fnl.list, func);
+
+    //添加辅助信息
+    if(lt.fnl.list.NumberOfItems == 1)
+    {
+        AddSingleRowFormat(lt, flie, func, line, TX_buffer);
+    }
+    else if(lt.fnl.list.NumberOfItems == 2)
+    {
+        AddMultipleRowFormat_start(lt, TX_buffer);
+        AddMultipleRowFormat_end(lt, TX_buffer + strlen(TX_buffer));
+        AddSingleRowFormat(lt, flie, func, line, TX_buffer + strlen(TX_buffer));
+    }
+    else
+    {
+        lt.fnl.list.NumberOfItems = lt.fnl.list.NumberOfItems - 2;
+
+        AddMultipleRowFormat_start(lt, TX_buffer);
+        for(int i=0;i<lt.fnl.list.NumberOfItems;i++)
+        {
+            AddMultipleRowFormat_middle(lt, TX_buffer + strlen(TX_buffer));
+        }
+        AddMultipleRowFormat_end(lt, TX_buffer + strlen(TX_buffer));
+        AddSingleRowFormat(lt, flie, func, line, TX_buffer + strlen(TX_buffer));
+    }
+
+
+    va_start(args,format);
+    count = vsnprintf(TX_buffer, TX_buffer_size, format, args);
+    va_end(args);
+
+    return lt_ringbuffer_push_str(TX_buffer, count);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
