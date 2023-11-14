@@ -5,6 +5,7 @@
 extern "C" {
 #endif
 
+#include "log_tree_def.h"
 
 /* 
  |  编译器必须是C99标准以上
