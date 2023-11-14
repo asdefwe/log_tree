@@ -245,7 +245,7 @@ uint32_t InsertOrRemove(lg_list_t* list, char* FounctionName)
     return 1;
 
 del:
-    if(number == 0) return 1;
+    if(Number == 0) return 1;
 
     for(pxIterator = ListEndItem; Number > 0; pxIterator = (void*)pxIterator->pxNext)
     {
@@ -294,14 +294,20 @@ uint32_t List_Init(Founction_name_List_t* Fnl)
 
 
 
-#define lg_Print(lt_core_t lt, format, ...)
-{
-    my_printf(lt, __FILE__, __func__, __LINE__, format, ##__VA_ARGS__);
-}
+// #define lg_Print(lt_core_t lt, format, ...)  lt_printf(lt, format,  ##__VA_ARGS__)     
+
+   
+// #define lg_Print(lt_core_t lt, format, ...)  {                      \
+//     char* FileName = __FILE__;                                                          \
+//     char* FuncName = __func__;                                                          \
+//     uint32_t Line = __LINE__;                                                          \
+//     lt_printf(lt, format, FileName, FuncName, Line,  ##__VA_ARGS__)     \
+// }
+
 
 
 void AddSingleRowFormat(lt_core_t lt,
-                        const uint8_t* flie, const uint8_t* func, const uint8_t* line,
+                        const uint8_t* flie, const uint8_t* func, const uint32_t line,
                         uint8_t* str)
 {
     if(lt.SingleRowFormat.filename == TRUE)
@@ -357,11 +363,11 @@ void AddSingleRowFormat(lt_core_t lt,
 void AddMultipleRowFormat_start(lt_core_t lt, uint8_t* str)
 { 
     memcpy(str, 
-           lt.MultipleRowFormat.FirstTextIndent_format, 
+           &lt.MultipleRowFormat.FirstTextIndent_format, 
            lt.MultipleRowFormat.FirstTextIndent_length);
     
     memcpy(str + 1, 
-           lt.MultipleRowFormat.SecondaryTextIndent_format, 
+           &lt.MultipleRowFormat.SecondaryTextIndent_format, 
            1);
 }
 
@@ -369,7 +375,7 @@ void AddMultipleRowFormat_start(lt_core_t lt, uint8_t* str)
 void AddMultipleRowFormat_middle(lt_core_t lt, uint8_t* str)
 {
     memcpy(str, 
-           lt.MultipleRowFormat.SecondarySecondaryTextIndent_format,
+           &lt.MultipleRowFormat.SecondarySecondaryTextIndent_format,
            5);
 }
 
@@ -377,14 +383,14 @@ void AddMultipleRowFormat_middle(lt_core_t lt, uint8_t* str)
 void AddMultipleRowFormat_end(lt_core_t lt, uint8_t* str)
 {
     memcpy(str, 
-           lt.MultipleRowFormat.SecondaryTextIndent_format, 
+           &lt.MultipleRowFormat.SecondaryTextIndent_format, 
            lt.MultipleRowFormat.SecondaryTextIndent_length);
 }
 
 
 char TX_buffer[TX_buffer_size];
-int my_printf(lt_core_t lt,
-              const uint8_t* flie, const uint8_t* func, const uint8_t* line,
+int lt_printf(lt_core_t lt,
+              uint8_t* flie, uint8_t* func, uint32_t line,
               const uint8_t *format, ...) 
 {
     va_list args;
@@ -424,7 +430,9 @@ int my_printf(lt_core_t lt,
     count = vsnprintf(TX_buffer, TX_buffer_size, format, args);
     va_end(args);
 
-    return lt_ringbuffer_push_str(TX_buffer, count);
+    printf("[%d]%s", TX_buffer_size, TX_buffer);
+
+    return count;
 }
 
 
