@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include "log_tree_def.h"
+#include "log_tree.h"
 
 #include <sys/wait.h>
 
@@ -16,7 +16,7 @@ void test_ringbuffer()
 
     while(1)
     {
-        gets(recivce);
+        // gets(recivce);
 
         for(int i=0;i<3;i++)
         {
@@ -34,7 +34,6 @@ void test_ringbuffer()
 
 }
 
-
 void printf_test()
 {
     lt_ringbuffer_Init(300);
@@ -44,12 +43,11 @@ void printf_test()
     float m = 3.1415926;
     int hex = 0x55FCBD;
 
-    int number = my_printf("!@#$%^%\r\nint:%d\r\nstr:%s\r\nfloat:%f\r\nhex:%x\r\nScientific notation:%e\r\n",
-                                                         i, str, m, hex, m);
-    printf("input number:%d\r\n", number);
+    // int number = my_printf("!@#$%^%\r\nint:%d\r\nstr:%s\r\nfloat:%f\r\nhex:%x\r\nScientific notation:%e\r\n",
+    //                                                      i, str, m, hex, m);
+    // printf("input number:%d\r\n", number);
     lt_ringbuffer_pop_str();
 }
-
 
 void list_test()
 {
@@ -93,20 +91,15 @@ void main()
 
     // printf_test();
 
-    list_test();
+    // list_test();
 
-    // char* test1 = (uint8_t*)malloc(1000);
-    // char data1[10] = "abcdefg";
-    // char data2[10] = "hijklmn";
-    // strcpy(test1, data1);
-    // strcpy(test1+strlen(data1)+1, data2);
-    // log("malloc address:0x%x", test1);
-    // log("test1:%s\ttest1:%d", test1, strlen(data1));
-    // log("test1:%s\ttest1:%d", data2, strlen(data2));
-    // log("malloc end address:0x%x", test1+1000);
-    // free(test1);
-    // log("====== free test ======");
-    // log("test1:%s\ttest1:%d", test1, strlen(data1));
+    lt_core_t lt = lt_Default_Setting;
 
-  
+    printf("[%s][%s][%d]\r\n", __FILE__, __func__, __LINE__);
+
+    log("SingleRowFormat.Interval_forma:%s", lt.SingleRowFormat.Interval_format);
+    log("MultipleRowFormat.FirstTextIndent_format:%s", lt.MultipleRowFormat.FirstTextIndent_format);
+    log("MultipleRowFormat.SecondaryTextIndent_format:%s", lt.MultipleRowFormat.SecondaryTextIndent_format);
+    log("MultipleRowFormat.SecondarySecondaryTextIndent_format:%s", lt.MultipleRowFormat.SecondarySecondaryTextIndent_format);
+
 }
