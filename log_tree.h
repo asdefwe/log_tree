@@ -42,7 +42,7 @@ int my_printf(const uint8_t *format, ...);
 
 
 
-
+int lt_printf(lt_core_t lt, const uint8_t* flie, const uint8_t* func, uint32_t line, uint8_t *format, ...);
 
 
 #ifdef __cplusplus

@@ -29,7 +29,7 @@ uint32_t lt_ringbuffer_pop_str(void);
 
 
 
-
+#if 1
 
 /*====================================================*/
 /*                     ringbuffer                     */
@@ -154,7 +154,7 @@ uint32_t lt_ringbuffer_pop_str(void)
     return 0;
 }
 
-
+#endif
 
 
 /*====================================================*/
@@ -194,6 +194,9 @@ void vListInsertEnd(lg_list_t * const pxList, lg_ListItem_t * const pxNewListIte
 	pxIndex->pxPrevious = (void*)pxNewListItem;
 
 	( pxList->NumberOfItems )++;
+
+    printf("ListEndItem->:pvOwner%u %s\r\n", ListEndItem->pvOwner, ListEndItem->pvOwner);
+    printf("pxList->NumberOfItems:%d\r\n", pxList->NumberOfItems);
 }
 
 // 移除指定节点
@@ -221,7 +224,7 @@ uint32_t uxListRemove(lg_list_t * const pxList, lg_ListItem_t * const pxItemToRe
 // 函  数：将元素插入列表或从列表中删除
 // 参  数：列表指针  函数名
 // 返回值：2-插入数据   1-无操作   0-删除数据
-uint32_t InsertOrRemove(lg_list_t* list, char* FounctionName)
+uint32_t InsertOrRemove(lg_list_t* list, const uint8_t* FounctionName)
 {
     uint8_t Number = 0;
     lg_ListItem_t * pxIterator = NULL;
@@ -233,7 +236,7 @@ uint32_t InsertOrRemove(lg_list_t* list, char* FounctionName)
         if(memcmp(pxIterator->pvOwner, FounctionName, NameSize) == 0) 
         {
             goto del;
-        }  
+        }
         Number++;
     }
 
@@ -241,6 +244,7 @@ uint32_t InsertOrRemove(lg_list_t* list, char* FounctionName)
     lg_ListItem_t* NewListItem = (lg_ListItem_t*)calloc(12, sizeof(uint8_t));
     NewListItem->pvOwner = (char*)calloc(NameSize, sizeof(uint8_t));
     memcpy(NewListItem->pvOwner, FounctionName, NameSize);
+    printf("NewListItem->pvOwner:%u %u\r\n", NewListItem->pvOwner, FounctionName);
     vListInsertEnd(list, NewListItem);
     return 1;
 
@@ -261,9 +265,10 @@ void PrintList(lg_list_t* list)
 {
     uint8_t Number = 0;
     lg_ListItem_t * pxIterator = NULL;
-    lg_ListItem_t * const ListEndItem = (void*)list->ListEnd.pxNext;
+    lg_ListItem_t * const ListEndItem = (void*)list->ListEnd.pxPrevious;
 
-    for(pxIterator = ListEndItem; Number < list->NumberOfItems; pxIterator = (void*)pxIterator->pxNext)
+    printf("===== list print =====\r\n");
+    for(pxIterator = ListEndItem; Number < list->NumberOfItems; pxIterator = (void*)pxIterator->pxPrevious)
     {
         Number++;
         printf("[%d] %s\r\n", Number, (char*)(pxIterator->pvOwner));
@@ -280,19 +285,9 @@ uint32_t List_Init(Founction_name_List_t* Fnl)
     return 0;
 }
 
-
-
-
-
-
-
-
 /*===============================================================*/
 /*                        log tree kernel                        */
 /*===============================================================*/
-
-
-
 
 // #define lg_Print(lt_core_t lt, format, ...)  lt_printf(lt, format,  ##__VA_ARGS__)     
 
@@ -320,18 +315,18 @@ void AddSingleRowFormat(lt_core_t lt,
             }
             else
             {
-                sprintf(str, "[%s][%d]", flie, line);
+                sprintf(str, "[%s][%s]", flie, func);
             }
         }
         else
         {
-            if(lt.SingleRowFormat.function == FALSE)
+            if(lt.SingleRowFormat.line == TRUE)
             {
-                sprintf(str, "[%s][%s]", flie, func);
+                sprintf(str, "[%s][%d]", flie, line);
             }
             else
             {
-                sprintf(str, "[%s][%s]", flie, func);
+                sprintf(str, "[%s]", flie);
             }
         }
 
@@ -346,7 +341,7 @@ void AddSingleRowFormat(lt_core_t lt,
             }
             else
             {
-                sprintf(str, "[%s]", flie);
+                sprintf(str, "[%s]", func);
             }
         }
         else
@@ -390,8 +385,8 @@ void AddMultipleRowFormat_end(lt_core_t lt, uint8_t* str)
 
 char TX_buffer[TX_buffer_size];
 int lt_printf(lt_core_t lt,
-              uint8_t* flie, uint8_t* func, uint32_t line,
-              const uint8_t *format, ...) 
+              const uint8_t* flie, const uint8_t* func, uint32_t line,
+              uint8_t *format, ...) 
 {
     va_list args;
     int count;
@@ -399,8 +394,12 @@ int lt_printf(lt_core_t lt,
 
     memset(TX_buffer, 0, TX_buffer_size);
 
-    res = lt.fnl.UpdataList(&lt.fnl.list, func);
+    printf("func:%u\r\n", func);
 
+    res = lt.fnl.UpdataList(&lt.fnl.list, func);
+    lt.fnl.printList(&lt.fnl.list);
+
+#if 0
     //添加辅助信息
     if(lt.fnl.list.NumberOfItems == 1)
     {
@@ -424,13 +423,15 @@ int lt_printf(lt_core_t lt,
         AddMultipleRowFormat_end(lt, TX_buffer + strlen(TX_buffer));
         AddSingleRowFormat(lt, flie, func, line, TX_buffer + strlen(TX_buffer));
     }
+#endif
 
+    AddSingleRowFormat(lt, flie, func, line, TX_buffer);
 
     va_start(args,format);
-    count = vsnprintf(TX_buffer, TX_buffer_size, format, args);
+    count = vsnprintf(TX_buffer + strlen(TX_buffer), TX_buffer_size, format, args);
     va_end(args);
 
-    printf("[%d]%s", TX_buffer_size, TX_buffer);
+    printf("[size:%d]%s", count, TX_buffer);
 
     return count;
 }

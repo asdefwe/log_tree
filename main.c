@@ -7,6 +7,8 @@
 
 #define log(format, ...)   printf(format"\r\n", ##__VA_ARGS__)
 
+lt_core_t lt = lt_Default_Setting;
+
 void test_ringbuffer()
 {
     uint8_t recivce[4];
@@ -85,6 +87,23 @@ void list_test()
     printf("-------------------------------------------\r\n");
 }
 
+void functionC()
+{
+    lt_printf(lt, __FILE__, __func__, __LINE__, "function is run\r\n\r\n");
+}
+
+void functionB()
+{
+    lt_printf(lt, __FILE__, __func__, __LINE__, "func is running\r\n\r\n");
+    functionC();
+}
+
+void functionA()
+{
+    lt_printf(lt, __FILE__, __func__, __LINE__, "function is running\r\n\r\n");
+    functionB();
+}
+
 void main()
 {
     // test_ringbuffer();
@@ -93,13 +112,27 @@ void main()
 
     // list_test();
 
-    lt_core_t lt = lt_Default_Setting;
+    
+
+    List_Init(&lt.fnl);
 
     printf("[%s][%s][%d]\r\n", __FILE__, __func__, __LINE__);
+    printf("======================\r\n");
 
     log("SingleRowFormat.Interval_forma:%s", lt.SingleRowFormat.Interval_format);
     log("MultipleRowFormat.FirstTextIndent_format:%s", lt.MultipleRowFormat.FirstTextIndent_format);
     log("MultipleRowFormat.SecondaryTextIndent_format:%s", lt.MultipleRowFormat.SecondaryTextIndent_format);
     log("MultipleRowFormat.SecondarySecondaryTextIndent_format:%s", lt.MultipleRowFormat.SecondarySecondaryTextIndent_format);
 
+    printf("======================\r\n");
+    lt_printf(lt, __FILE__, __func__, __LINE__, "is running\r\n\r\n");
+    functionA();
+
 }
+
+
+
+
+
+
+

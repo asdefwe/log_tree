@@ -9,14 +9,6 @@ extern "C" {
 
 #include <stdint.h>
 
-#include "log_tree.h"
-
-
-
-
-
-
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
 
 
 /*===============================================================*/
@@ -81,7 +73,7 @@ typedef struct
 	lg_list_t list;
 
 	/* 外置接口函数 */
-	uint32_t (*UpdataList)(lg_list_t* Fnl, char* FounctionName);
+	uint32_t (*UpdataList)(lg_list_t* Fnl, const uint8_t* FounctionName);
 	void (*printList)(lg_list_t* list);
 
 }Founction_name_List_t;
@@ -143,7 +135,7 @@ typedef struct
 	lt_SingleRowFormat_t 		SingleRowFormat;		//单行格式
 	lt_MultipleRowFormat_t		MultipleRowFormat;		//多行间格式
 	Founction_name_List_t 		fnl;					//函数名列表
-	log_tree_ringbuffer_p 		log_buff;				//输出缓存		
+	// log_tree_ringbuffer_p 		log_buff;				//输出缓存		
 	uint8_t	isbegin;		
 	
 }lt_core_t;
