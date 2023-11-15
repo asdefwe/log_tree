@@ -116,25 +116,24 @@ typedef struct
 }lt_SingleRowFormat_t;
 
 /*				   ===========================================
- |				   ||[function1] log_tree begin		        ||        
- | 首行缩进格式-->  ||  |--[function2] fbbdfbdfbdfbdfb       ||            
- | 				   ||  |     |--[function3] iwqqwe568941    ||        
- | 				   ||  |     |     |--[function4] 489516qwd ||        	
- | 				   ||  |--[funciton2] dqw4896156            ||       
- | 				   ||  |--[funciton2] 4615wdxvc489          ||  
+ |				     [function1] log_tree begin		        ||        
+ | 首行缩进格式------>  |--[function2] fbbdfbdfbdfbdfb       ||            
+ | 				       |     |--[function3] iwqqwe568941    ||        
+ | 次级缩进格式-------->|     |--[function4] 489516qwd       ||        	
+ | 				       |--[funciton2] dqw4896156            ||       
+ | 				       |--[funciton2] 4615wdxvc489          ||  
  |                 ===========================================       
- |  			     ↑ ↑ ↑      ↑
- |				     | | |    次级次级缩进格式
- |  			     | | 次级缩进长度
- |  			     | 次级缩进格式
+ |  			     ↑   ↑    ↑
+ |				     |   |    次级次级缩进格式
+ |  			     |   次级缩进长度 
  |  			    首行缩进长度
  */
 typedef struct 
 {
 	uint8_t*	FirstTextIndent_format;					//首行缩进格式
-	uint8_t	FirstTextIndent_length;					//首行缩进长度
+	uint8_t		FirstTextIndent_length;					//首行缩进长度
 	uint8_t*	SecondaryTextIndent_format;				//次级缩进格式
-	uint8_t	SecondaryTextIndent_length;				//次级缩进长度
+	uint8_t		SecondaryTextIndent_length;				//次级缩进长度
 	uint8_t*	SecondarySecondaryTextIndent_format;	//次级次级缩进格式
 
 }lt_MultipleRowFormat_t;
@@ -159,16 +158,16 @@ typedef struct
 #define TRUE	1
 #define FALSE	0
 
-#define lt_Default_Setting {\
-	.SingleRowFormat.filename = FALSE,\
-	.SingleRowFormat.function = TRUE,\
-	.SingleRowFormat.line = FALSE,\
-	.SingleRowFormat.Interval_format = " ",\
-	.MultipleRowFormat.FirstTextIndent_format = " ",\
-	.MultipleRowFormat.FirstTextIndent_length = 2,\
-	.MultipleRowFormat.SecondaryTextIndent_format = "|",\
-	.MultipleRowFormat.SecondaryTextIndent_length = 2,\
-	.MultipleRowFormat.SecondarySecondaryTextIndent_format = " "\
+#define lt_Default_Setting {										\
+	.SingleRowFormat.filename = FALSE,								\
+	.SingleRowFormat.function = TRUE,								\
+	.SingleRowFormat.line = FALSE,									\
+	.SingleRowFormat.Interval_format = " ",							\
+	.MultipleRowFormat.FirstTextIndent_format = " ",				\
+	.MultipleRowFormat.FirstTextIndent_length = 2,					\
+	.MultipleRowFormat.SecondaryTextIndent_format = "|",			\
+	.MultipleRowFormat.SecondaryTextIndent_length = 2,				\
+	.MultipleRowFormat.SecondarySecondaryTextIndent_format = " "	\
 }
 
 
