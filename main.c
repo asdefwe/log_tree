@@ -7,7 +7,7 @@
 
 #define log(format, ...)   printf(format"\r\n", ##__VA_ARGS__)
 
-lt_core_t lt = lt_Default_Setting;
+lt_core_t lt;
 
 void test_ringbuffer()
 {
@@ -54,36 +54,40 @@ void printf_test()
 void list_test()
 {
     printf("======list strcut test======\r\n");
-    Founction_name_List_t fnl;
-    List_Init(&fnl);
+    Founction_name_List_t fnl1;
+    List_Init(&fnl1);
     printf("-------------------------------------------\r\n");
     printf("Save founction1\r\n");
-    fnl.UpdataList(&fnl.list, "founction1");
-    fnl.printList(&fnl.list);
+    fnl1.UpdataList(&fnl1.list, "asdgv");
+    fnl1.printList(&fnl1.list);
     printf("-------------------------------------------\r\n");
     printf("Save founction2\r\n");
-    fnl.UpdataList(&fnl.list, "founction2");
-    fnl.printList(&fnl.list);
+    fnl1.UpdataList(&fnl1.list, "15609");
+    fnl1.printList(&fnl1.list);
     printf("-------------------------------------------\r\n");
     printf("Save founction3\r\n");
-    fnl.UpdataList(&fnl.list, "founction3");
-    fnl.printList(&fnl.list);
+    fnl1.UpdataList(&fnl1.list, "tyn[]");
+    fnl1.printList(&fnl1.list);
     printf("-------------------------------------------\r\n");
     printf("Save founction4\r\n");
-    fnl.UpdataList(&fnl.list, "founction4");
-    fnl.printList(&fnl.list);
+    fnl1.UpdataList(&fnl1.list, "vb456");
+    fnl1.printList(&fnl1.list);
     printf("-------------------------------------------\r\n");
     printf("Save founction5\r\n");
-    fnl.UpdataList(&fnl.list, "founction5");
-    fnl.printList(&fnl.list);
+    fnl1.UpdataList(&fnl1.list, "-+*/+");
+    fnl1.printList(&fnl1.list);
+    printf("-------------------------------------------\r\n");
+    printf("Save founction6\r\n");
+    fnl1.UpdataList(&fnl1.list, "#!$*^");
+    fnl1.printList(&fnl1.list);
+    printf("-------------------------------------------\r\n");
+    printf("Save founction7\r\n");
+    fnl1.UpdataList(&fnl1.list, "dfb0b");
+    fnl1.printList(&fnl1.list);
     printf("-------------------------------------------\r\n");
     printf("Del founction5\r\n");
-    fnl.UpdataList(&fnl.list, "founction5");
-    fnl.printList(&fnl.list);
-    printf("-------------------------------------------\r\n");
-    printf("Del founction4\r\n");
-    fnl.UpdataList(&fnl.list, "founction4");
-    fnl.printList(&fnl.list);
+    fnl1.UpdataList(&fnl1.list, "vb456");
+    fnl1.printList(&fnl1.list);
     printf("-------------------------------------------\r\n");
 }
 
@@ -112,21 +116,45 @@ void main()
 
     list_test();
 
-    
 
-    List_Init(&lt.fnl);
+    // memset(&lt, 0, sizeof(lt));
+    // List_Init(&lt.fnl);
 
-    printf("[%s][%s][%d]\r\n", __FILE__, __func__, __LINE__);
-    printf("======================\r\n");
+    // uint8_t* str1 = "asdgv";
+    // uint8_t* str2 = "15609";
+    // uint8_t* str3 = "tyn[]";
+    // uint8_t* str4 = "vb456";
+    // uint8_t* str5 = "-+*/+";
+    // uint8_t* str6 = "#!$*^";
+    // uint8_t* str7 = "dfb0b";
 
-    log("SingleRowFormat.Interval_forma:%s", lt.SingleRowFormat.Interval_format);
-    log("MultipleRowFormat.FirstTextIndent_format:%s", lt.MultipleRowFormat.FirstTextIndent_format);
-    log("MultipleRowFormat.SecondaryTextIndent_format:%s", lt.MultipleRowFormat.SecondaryTextIndent_format);
-    log("MultipleRowFormat.SecondarySecondaryTextIndent_format:%s", lt.MultipleRowFormat.SecondarySecondaryTextIndent_format);
+    // lt.fnl.UpdataList(&lt.fnl.list, str1);
 
-    printf("======================\r\n");
-    lt_printf(lt, __FILE__, __func__, __LINE__, "is running\r\n\r\n");
-    functionA();
+    // lt.fnl.UpdataList(&lt.fnl.list, str2);
+
+    // lt.fnl.UpdataList(&lt.fnl.list, str3);
+
+    // lt.fnl.UpdataList(&lt.fnl.list, str4);
+    // lt.fnl.printList(&lt.fnl.list);
+
+    // lt.fnl.UpdataList(&lt.fnl.list, str5);
+
+    // lt.fnl.UpdataList(&lt.fnl.list, str6);
+
+    // lt.fnl.UpdataList(&lt.fnl.list, str7);
+    // lt.fnl.printList(&lt.fnl.list);
+
+//     printf("[%s][%s][%d]\r\n", __FILE__, __func__, __LINE__);
+//     printf("======================\r\n");
+
+//     log("SingleRowFormat.Interval_forma:%s", lt.SingleRowFormat.Interval_format);
+//     log("MultipleRowFormat.FirstTextIndent_format:%s", lt.MultipleRowFormat.FirstTextIndent_format);
+//     log("MultipleRowFormat.SecondaryTextIndent_format:%s", lt.MultipleRowFormat.SecondaryTextIndent_format);
+//     log("MultipleRowFormat.SecondarySecondaryTextIndent_format:%s", lt.MultipleRowFormat.SecondarySecondaryTextIndent_format);
+
+    // printf("======================\r\n");
+    // lt_printf(lt, __FILE__, __func__, __LINE__, "is running\r\n\r\n");
+    // functionA();
 
 }
 

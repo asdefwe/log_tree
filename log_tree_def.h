@@ -159,7 +159,7 @@ typedef struct
 	.MultipleRowFormat.FirstTextIndent_length = 2,					\
 	.MultipleRowFormat.SecondaryTextIndent_format = "|",			\
 	.MultipleRowFormat.SecondaryTextIndent_length = 2,				\
-	.MultipleRowFormat.SecondarySecondaryTextIndent_format = " "	\
+	.MultipleRowFormat.SecondarySecondaryTextIndent_format = " " \
 }
 
 
