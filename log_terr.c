@@ -228,6 +228,7 @@ uint32_t InsertOrRemove(lg_list_t* list, const uint8_t* FounctionName)
 {
     uint8_t Number = 0;
     lg_ListItem_t * pxIterator = NULL;
+    lg_ListItem_t * del_pxIterator = NULL;
     lg_ListItem_t * const ListEndItem = (void*)list->ListEnd.pxPrevious;
     uint8_t NameSize = strlen(FounctionName);
 
@@ -250,13 +251,16 @@ uint32_t InsertOrRemove(lg_list_t* list, const uint8_t* FounctionName)
 
 del:
     if(Number == 0) return 1;
-
-    for(pxIterator = ListEndItem; Number > 0; pxIterator = (void*)pxIterator->pxNext)
+    printf("[%d]\r\n", __LINE__);
+    for(pxIterator = ListEndItem; Number > 0; pxIterator = (void*)pxIterator->pxPrevious)
     {
+        printf("%d\r\n", Number);
         Number--;
+        del_pxIterator = pxIterator;
         uxListRemove(list, pxIterator);
-        free(pxIterator->pvOwner);
-        free(pxIterator);
+        free(del_pxIterator->pvOwner);
+        free(del_pxIterator);
+        printf("\n\n");
     }
     return 0;
 }
@@ -394,7 +398,7 @@ int lt_printf(lt_core_t lt,
 
     memset(TX_buffer, 0, TX_buffer_size);
 
-    printf("func:%u\r\n", func);
+    printf("func:%u %s\r\n", func, func);
 
     res = lt.fnl.UpdataList(&lt.fnl.list, func);
     lt.fnl.printList(&lt.fnl.list);
@@ -431,7 +435,7 @@ int lt_printf(lt_core_t lt,
     count = vsnprintf(TX_buffer + strlen(TX_buffer), TX_buffer_size, format, args);
     va_end(args);
 
-    printf("[size:%d]%s", count, TX_buffer);
+    // printf("[size:%d]%s", count, TX_buffer);
 
     return count;
 }
