@@ -110,7 +110,7 @@ void main()
 
     // printf_test();
 
-    // list_test();
+    list_test();
 
     
 

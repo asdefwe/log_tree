@@ -265,13 +265,13 @@ void PrintList(lg_list_t* list)
 {
     uint8_t Number = 0;
     lg_ListItem_t * pxIterator = NULL;
-    lg_ListItem_t * const ListEndItem = (void*)list->ListEnd.pxPrevious;
+    lg_ListItem_t * const ListEndItem = (void*)list->ListEnd.pxNext;
 
     printf("===== list print =====\r\n");
-    for(pxIterator = ListEndItem; Number < list->NumberOfItems; pxIterator = (void*)pxIterator->pxPrevious)
+    for(pxIterator = ListEndItem; Number < list->NumberOfItems; pxIterator = (void*)pxIterator->pxNext)
     {
         Number++;
-        printf("[%d] %s\r\n", Number, (char*)(pxIterator->pvOwner));
+        printf("[%d] %u %s\r\n", Number, pxIterator->pvOwner, (char*)(pxIterator->pvOwner));
     }
 }
 
