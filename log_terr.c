@@ -253,8 +253,6 @@ del:
     do
     {
         del_pxIterator = (lg_ListItem_t *)pxIterator;
-        // printf(" \"%u pxIterator->pxPrevious\" \r\n", pxIterator->pxPrevious);
-        // printf(" \"%u %s\" %d\r\n\r\n", pxIterator->pvOwner, pxIterator->pvOwner, Number);
         pxIterator = (lg_ListItem_t *)pxIterator->pxPrevious;
         uxListRemove(list, del_pxIterator);
         free(del_pxIterator->pvOwner);
@@ -275,7 +273,7 @@ void PrintList(lg_list_t* list)
     for(pxIterator = ListEndItem; Number < list->NumberOfItems; pxIterator = (void*)pxIterator->pxNext)
     {
         Number++;
-        printf("[%d] %s\r\n", Number, (char*)(pxIterator->pvOwner));
+        printf("[%d] %u %s\r\n", Number, pxIterator->pvOwner, (char*)(pxIterator->pvOwner));
     }
 }
 
@@ -388,7 +386,7 @@ void AddMultipleRowFormat_end(lt_core_t lt, uint8_t* str)
 
 
 char TX_buffer[TX_buffer_size];
-int lt_printf(lt_core_t lt,
+int lt_printf(lt_core_t* lt,
               const uint8_t* flie, const uint8_t* func, uint32_t line,
               uint8_t *format, ...) 
 {
@@ -398,10 +396,8 @@ int lt_printf(lt_core_t lt,
 
     memset(TX_buffer, 0, TX_buffer_size);
 
-    // printf("func:%u %s\r\n", func, func);
-
-    res = lt.fnl.UpdataList(&lt.fnl.list, func);
-    lt.fnl.printList(&lt.fnl.list);
+    res = lt->fnl.UpdataList(&lt->fnl.list, func);
+    lt->fnl.printList(&lt->fnl.list);
 
 #if 0
     //添加辅助信息
@@ -429,13 +425,13 @@ int lt_printf(lt_core_t lt,
     }
 #endif
 
-    AddSingleRowFormat(lt, flie, func, line, TX_buffer);
+    AddSingleRowFormat(*lt, flie, func, line, TX_buffer);
 
     va_start(args,format);
     count = vsnprintf(TX_buffer + strlen(TX_buffer), TX_buffer_size, format, args);
     va_end(args);
 
-    // printf("[size:%d]%s", count, TX_buffer);
+    printf("[size:%d]%s", count, TX_buffer);
 
     return count;
 }
