@@ -273,7 +273,7 @@ void PrintList(lg_list_t* list)
     for(pxIterator = ListEndItem; Number < list->NumberOfItems; pxIterator = (void*)pxIterator->pxNext)
     {
         Number++;
-        printf("[%d] %u %s\r\n", Number, pxIterator->pvOwner, (char*)(pxIterator->pvOwner));
+        printf("[%d] %s\r\n", Number, (char*)(pxIterator->pvOwner));
     }
 }
 
@@ -303,15 +303,15 @@ uint32_t List_Init(Founction_name_List_t* Fnl)
 
 
 
-void AddSingleRowFormat(lt_core_t lt,
+void AddSingleRowFormat(lt_core_t* lt,
                         const uint8_t* flie, const uint8_t* func, const uint32_t line,
                         uint8_t* str)
 {
-    if(lt.SingleRowFormat.filename == TRUE)
+    if(lt->SingleRowFormat.filename == TRUE)
     {
-        if(lt.SingleRowFormat.function == TRUE)
+        if(lt->SingleRowFormat.function == TRUE)
         {
-            if(lt.SingleRowFormat.line == TRUE)
+            if(lt->SingleRowFormat.line == TRUE)
             {
                 sprintf(str, "[%s][%s][%d]", flie, func, line);
             }
@@ -322,7 +322,7 @@ void AddSingleRowFormat(lt_core_t lt,
         }
         else
         {
-            if(lt.SingleRowFormat.line == TRUE)
+            if(lt->SingleRowFormat.line == TRUE)
             {
                 sprintf(str, "[%s][%d]", flie, line);
             }
@@ -335,9 +335,9 @@ void AddSingleRowFormat(lt_core_t lt,
     }
     else
     {
-        if(lt.SingleRowFormat.function == TRUE)
+        if(lt->SingleRowFormat.function == TRUE)
         {
-            if(lt.SingleRowFormat.line == TRUE)
+            if(lt->SingleRowFormat.line == TRUE)
             {
                 sprintf(str, "[%s][%d]", func, line);
             }
@@ -348,7 +348,7 @@ void AddSingleRowFormat(lt_core_t lt,
         }
         else
         {
-            if(lt.SingleRowFormat.line == TRUE)
+            if(lt->SingleRowFormat.line == TRUE)
             {
                 sprintf(str, "[%d]", line);
             }
@@ -357,31 +357,31 @@ void AddSingleRowFormat(lt_core_t lt,
 }   
 
 //添加        “  |”
-void AddMultipleRowFormat_start(lt_core_t lt, uint8_t* str)
+void AddMultipleRowFormat_start(lt_core_t* lt, uint8_t* str)
 { 
     memcpy(str, 
-           &lt.MultipleRowFormat.FirstTextIndent_format, 
-           lt.MultipleRowFormat.FirstTextIndent_length);
+           lt->MultipleRowFormat.FirstTextIndent_format, 
+           lt->MultipleRowFormat.FirstTextIndent_length);
     
     memcpy(str + 1, 
-           &lt.MultipleRowFormat.SecondaryTextIndent_format, 
+           lt->MultipleRowFormat.SecondaryTextIndent_format, 
            1);
 }
 
 //添加      “   ”
-void AddMultipleRowFormat_middle(lt_core_t lt, uint8_t* str)
+void AddMultipleRowFormat_middle(lt_core_t* lt, uint8_t* str)
 {
     memcpy(str, 
-           &lt.MultipleRowFormat.SecondarySecondaryTextIndent_format,
+           lt->MultipleRowFormat.SecondarySecondaryTextIndent_format,
            5);
 }
 
 //添加      “--”
-void AddMultipleRowFormat_end(lt_core_t lt, uint8_t* str)
+void AddMultipleRowFormat_end(lt_core_t* lt, uint8_t* str)
 {
     memcpy(str, 
-           &lt.MultipleRowFormat.SecondaryTextIndent_format, 
-           lt.MultipleRowFormat.SecondaryTextIndent_length);
+           lt->MultipleRowFormat.SecondaryTextIndent_format, 
+           lt->MultipleRowFormat.SecondaryTextIndent_length);
 }
 
 
@@ -397,15 +397,15 @@ int lt_printf(lt_core_t* lt,
     memset(TX_buffer, 0, TX_buffer_size);
 
     res = lt->fnl.UpdataList(&lt->fnl.list, func);
-    lt->fnl.printList(&lt->fnl.list);
+    // lt->fnl.printList(&lt->fnl.list);
 
-#if 0
+#if 1
     //添加辅助信息
-    if(lt.fnl.list.NumberOfItems == 1)
+    if(lt->fnl.list.NumberOfItems == 1)
     {
         AddSingleRowFormat(lt, flie, func, line, TX_buffer);
     }
-    else if(lt.fnl.list.NumberOfItems == 2)
+    else if(lt->fnl.list.NumberOfItems == 2)
     {
         AddMultipleRowFormat_start(lt, TX_buffer);
         AddMultipleRowFormat_end(lt, TX_buffer + strlen(TX_buffer));
@@ -413,10 +413,10 @@ int lt_printf(lt_core_t* lt,
     }
     else
     {
-        lt.fnl.list.NumberOfItems = lt.fnl.list.NumberOfItems - 2;
+        lt->fnl.list.NumberOfItems = lt->fnl.list.NumberOfItems - 2;
 
         AddMultipleRowFormat_start(lt, TX_buffer);
-        for(int i=0;i<lt.fnl.list.NumberOfItems;i++)
+        for(int i=0;i<lt->fnl.list.NumberOfItems;i++)
         {
             AddMultipleRowFormat_middle(lt, TX_buffer + strlen(TX_buffer));
         }
@@ -425,13 +425,13 @@ int lt_printf(lt_core_t* lt,
     }
 #endif
 
-    AddSingleRowFormat(*lt, flie, func, line, TX_buffer);
+    // AddSingleRowFormat(lt, flie, func, line, TX_buffer);
 
     va_start(args,format);
     count = vsnprintf(TX_buffer + strlen(TX_buffer), TX_buffer_size, format, args);
     va_end(args);
 
-    printf("[size:%d]%s", count, TX_buffer);
+    printf("%s", TX_buffer);
 
     return count;
 }
