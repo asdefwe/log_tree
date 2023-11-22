@@ -124,8 +124,9 @@ typedef struct
 {
 	uint8_t*	FirstTextIndent_format;					//首行缩进格式
 	uint8_t		FirstTextIndent_length;					//首行缩进长度
-	uint8_t*	SecondaryTextIndent_format;				//次级缩进格式
-	uint8_t		SecondaryTextIndent_length;				//次级缩进长度
+	uint8_t*	SecondaryTextIndent1_format;				//次级缩进格式
+	uint8_t*	SecondaryTextIndent2_format;				//次级缩进格式
+	uint8_t		SecondaryTextIndent2_length;				//次级缩进长度
 	uint8_t*	SecondarySecondaryTextIndent_format;	//次级次级缩进格式
 
 }lt_MultipleRowFormat_t;
@@ -154,12 +155,13 @@ typedef struct
 	.SingleRowFormat.filename = FALSE,								\
 	.SingleRowFormat.function = TRUE,								\
 	.SingleRowFormat.line = FALSE,									\
-	.SingleRowFormat.Interval_format = " ",							\
-	.MultipleRowFormat.FirstTextIndent_format = " ",				\
+	.SingleRowFormat.Interval_format = "  ",							\
+	.MultipleRowFormat.FirstTextIndent_format = "  ",				\
 	.MultipleRowFormat.FirstTextIndent_length = 2,					\
-	.MultipleRowFormat.SecondaryTextIndent_format = "|",			\
-	.MultipleRowFormat.SecondaryTextIndent_length = 2,				\
-	.MultipleRowFormat.SecondarySecondaryTextIndent_format = " " \
+	.MultipleRowFormat.SecondaryTextIndent1_format = "|",			\
+	.MultipleRowFormat.SecondaryTextIndent2_format = "--",			\
+	.MultipleRowFormat.SecondaryTextIndent2_length = 2,				\
+	.MultipleRowFormat.SecondarySecondaryTextIndent_format = "   " \
 }
 
 

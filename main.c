@@ -102,15 +102,23 @@ void list_test()
     printf("-------------------------------------------\r\n");
 }
 
+void functionD()
+{
+    lt_printf(&lt, __FILE__, __func__, __LINE__, "funcD is running\r\n");
+}
+
 void functionC()
 {
-    lt_printf(&lt, __FILE__, __func__, __LINE__, "func C is running\r\n");
+    lt_printf(&lt, __FILE__, __func__, __LINE__, "funcC is running, will run func D\r\n");
+    functionD();
 }
 
 void functionB()
 {
-    lt_printf(&lt, __FILE__, __func__, __LINE__, "func B is running, will run func C\r\n");
+    lt_printf(&lt, __FILE__, __func__, __LINE__, "funcB is running, will run func C\r\n");
     functionC();
+    lt_printf(&lt, __FILE__, __func__, __LINE__, "funcB is run 123456\r\n");
+    lt_printf(&lt, __FILE__, __func__, __LINE__, "funcB is run over\r\n");
 }
 
 void functionA()
@@ -138,13 +146,18 @@ void main()
     log("lt.SingleRowFormat.Interval_format:%s", lt.SingleRowFormat.Interval_format);
     log("SingleRowFormat.Interval_forma:%s", lt.SingleRowFormat.Interval_format);
     log("MultipleRowFormat.FirstTextIndent_format:%s", lt.MultipleRowFormat.FirstTextIndent_format);
-    log("MultipleRowFormat.SecondaryTextIndent_format:%s", lt.MultipleRowFormat.SecondaryTextIndent_format);
+    log("MultipleRowFormat.SecondaryTextIndent1_format:%s", lt.MultipleRowFormat.SecondaryTextIndent1_format);
+    log("MultipleRowFormat.SecondaryTextIndent2_format:%s", lt.MultipleRowFormat.SecondaryTextIndent2_format);
+    log("MultipleRowFormat.SecondaryTextIndent_length:%d", lt.MultipleRowFormat.SecondaryTextIndent2_length);
     log("MultipleRowFormat.SecondarySecondaryTextIndent_format:%s", lt.MultipleRowFormat.SecondarySecondaryTextIndent_format);
-
+    
     printf("======================\r\n");
     lt_printf(&lt, __FILE__, __func__, __LINE__, "log tree test is running\r\n");
     functionA();
 
+    lt_printf(&lt, __FILE__, __func__, __LINE__, "log tree test over\r\n");
+
+    // lt.fnl.printList(&lt.fnl.list);
 }
 
 

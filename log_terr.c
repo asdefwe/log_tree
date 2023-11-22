@@ -356,16 +356,14 @@ void AddSingleRowFormat(lt_core_t* lt,
     }
 }   
 
-//添加        “  |”
+//添加“  |”
 void AddMultipleRowFormat_start(lt_core_t* lt, uint8_t* str)
 { 
     memcpy(str, 
            lt->MultipleRowFormat.FirstTextIndent_format, 
            lt->MultipleRowFormat.FirstTextIndent_length);
-    
-    memcpy(str + 1, 
-           lt->MultipleRowFormat.SecondaryTextIndent_format, 
-           1);
+
+    *(str + lt->MultipleRowFormat.FirstTextIndent_length) = * lt->MultipleRowFormat.SecondaryTextIndent1_format;
 }
 
 //添加      “   ”
@@ -373,15 +371,15 @@ void AddMultipleRowFormat_middle(lt_core_t* lt, uint8_t* str)
 {
     memcpy(str, 
            lt->MultipleRowFormat.SecondarySecondaryTextIndent_format,
-           5);
+           3);
 }
 
 //添加      “--”
 void AddMultipleRowFormat_end(lt_core_t* lt, uint8_t* str)
 {
     memcpy(str, 
-           lt->MultipleRowFormat.SecondaryTextIndent_format, 
-           lt->MultipleRowFormat.SecondaryTextIndent_length);
+           lt->MultipleRowFormat.SecondaryTextIndent2_format, 
+           lt->MultipleRowFormat.SecondaryTextIndent2_length);
 }
 
 
@@ -413,19 +411,16 @@ int lt_printf(lt_core_t* lt,
     }
     else
     {
-        lt->fnl.list.NumberOfItems = lt->fnl.list.NumberOfItems - 2;
-
         AddMultipleRowFormat_start(lt, TX_buffer);
-        for(int i=0;i<lt->fnl.list.NumberOfItems;i++)
+        for(int i=0;i<lt->fnl.list.NumberOfItems - 2;i++)
         {
             AddMultipleRowFormat_middle(lt, TX_buffer + strlen(TX_buffer));
+            AddMultipleRowFormat_start(lt, TX_buffer + strlen(TX_buffer));
         }
         AddMultipleRowFormat_end(lt, TX_buffer + strlen(TX_buffer));
         AddSingleRowFormat(lt, flie, func, line, TX_buffer + strlen(TX_buffer));
     }
 #endif
-
-    // AddSingleRowFormat(lt, flie, func, line, TX_buffer);
 
     va_start(args,format);
     count = vsnprintf(TX_buffer + strlen(TX_buffer), TX_buffer_size, format, args);
