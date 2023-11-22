@@ -136,20 +136,6 @@ void main()
     // list_test();
    
     List_Init(&lt.fnl);
-
-    printf("[%s][%s][%d]\r\n", __FILE__, __func__, __LINE__);
-    printf("======================\r\n");
-
-    log("lt.SingleRowFormat.filename:%d", lt.SingleRowFormat.filename);
-    log("lt.SingleRowFormat.function:%d", lt.SingleRowFormat.function);
-    log("lt.SingleRowFormat.line:%d", lt.SingleRowFormat.line);
-    log("lt.SingleRowFormat.Interval_format:%s", lt.SingleRowFormat.Interval_format);
-    log("SingleRowFormat.Interval_forma:%s", lt.SingleRowFormat.Interval_format);
-    log("MultipleRowFormat.FirstTextIndent_format:%s", lt.MultipleRowFormat.FirstTextIndent_format);
-    log("MultipleRowFormat.SecondaryTextIndent1_format:%s", lt.MultipleRowFormat.SecondaryTextIndent1_format);
-    log("MultipleRowFormat.SecondaryTextIndent2_format:%s", lt.MultipleRowFormat.SecondaryTextIndent2_format);
-    log("MultipleRowFormat.SecondaryTextIndent_length:%d", lt.MultipleRowFormat.SecondaryTextIndent2_length);
-    log("MultipleRowFormat.SecondarySecondaryTextIndent_format:%s", lt.MultipleRowFormat.SecondarySecondaryTextIndent_format);
     
     printf("======================\r\n");
     lt_printf(&lt, __FILE__, __func__, __LINE__, "log tree test is running\r\n");
