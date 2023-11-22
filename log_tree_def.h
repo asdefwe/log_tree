@@ -155,13 +155,13 @@ typedef struct
 	.SingleRowFormat.filename = FALSE,								\
 	.SingleRowFormat.function = TRUE,								\
 	.SingleRowFormat.line = FALSE,									\
-	.SingleRowFormat.Interval_format = "  ",							\
+	.SingleRowFormat.Interval_format = "  ",						\
 	.MultipleRowFormat.FirstTextIndent_format = "  ",				\
 	.MultipleRowFormat.FirstTextIndent_length = 2,					\
 	.MultipleRowFormat.SecondaryTextIndent1_format = "|",			\
 	.MultipleRowFormat.SecondaryTextIndent2_format = "--",			\
 	.MultipleRowFormat.SecondaryTextIndent2_length = 2,				\
-	.MultipleRowFormat.SecondarySecondaryTextIndent_format = "   " \
+	.MultipleRowFormat.SecondarySecondaryTextIndent_format = "   "  \
 }
 
 
