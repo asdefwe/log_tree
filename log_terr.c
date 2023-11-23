@@ -352,6 +352,7 @@ void AddSingleRowFormat(lt_core_t* lt,
             }
         }
     }
+    strncpy(str + strlen(str), lt->SingleRowFormat.Interval_format, strlen(lt->SingleRowFormat.Interval_format));
 }   
 
 //添加“  |”
