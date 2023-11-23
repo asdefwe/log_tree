@@ -6,7 +6,7 @@
 extern "C" {
 #endif
 
-
+#include <stdlib.h>
 #include <stdint.h>
 
 
@@ -24,6 +24,23 @@ typedef struct{
 
 }log_tree_ringbuffer_t, *log_tree_ringbuffer_p;
 
+typedef struct 
+{
+	uint8_t* 	buffer;
+	uint8_t* 	read;
+	uint8_t* 	write;
+
+}lt_QueueBuffer_t;
+
+
+typedef struct 
+{
+	uint32_t	buffer_size;
+	uint32_t	number;
+	lt_QueueBuffer_t buffer
+}lg_Queue_t;
+
+
 void lt_ringbuffer_Init(long unsigned int size);
 uint32_t lt_ringbuffer_push(uint8_t data);
 uint8_t lt_ringbuffer_pop(void);
@@ -35,9 +52,6 @@ uint32_t lt_ringbuffer_pop_str(void);
 /*                              list                             */
 /*===============================================================*/
 // 借鉴FreeRTOS的列表定义
-
-// 节点最大值
-#define MAX_List	0xFFFFFFFFUL
 
 /*
  | Definition of the only type of object that a list can contain.

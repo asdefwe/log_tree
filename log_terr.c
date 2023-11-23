@@ -1,4 +1,4 @@
-#include "log_tree_def.h"
+
 #include "log_tree.h"
 
 #include <stdio.h>
@@ -23,7 +23,7 @@ uint32_t lt_ringbuffer_pop_str(void);
 // https://www.runoob.com/cprogramming/c-function-vsprintf.html
 // https://wenku.csdn.net/answer/cd802c5640a44ac29cbc2f67173b20a5
 
-#include <stdio.h>
+// #include <stdio.h>
 #include <stdarg.h>
 
 
@@ -383,7 +383,7 @@ void AddMultipleRowFormat_end(lt_core_t* lt, uint8_t* str)
 
 
 char TX_buffer[TX_buffer_size];
-int lt_printf(lt_core_t* lt,
+extern int lt_printf(lt_core_t* lt,
               const uint8_t* flie, const uint8_t* func, uint32_t line,
               uint8_t *format, ...) 
 {
@@ -425,7 +425,9 @@ int lt_printf(lt_core_t* lt,
     count = vsnprintf(TX_buffer + strlen(TX_buffer), TX_buffer_size, format, args);
     va_end(args);
 
-    printf("%s", TX_buffer);
+    printf("[%d][%d]%.*s", strlen(TX_buffer), count, strlen(TX_buffer), TX_buffer);
+    // printf("%.*s\n", len, str);
+    // Console_Output("%s", count);
 
     return count;
 }

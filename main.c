@@ -62,6 +62,7 @@ void list_test()
 void functionD()
 {
     lt_print(&lt, "funcD is running\r\n");
+    lt_print(&lt, "funcD is over\r\n");
 }
 
 void functionC()

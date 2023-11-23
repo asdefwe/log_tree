@@ -11,10 +11,18 @@ extern "C" {
  |  编译器必须是C99标准以上
 */
 
+#include <stdio.h>
 
-/*=========== log tree setting ===========*/ 
-#define USE_std 1
+/*=========== 输入/输出接口 ===========*/
 
+//输入接口
+#define lt_print(lt, format, ...)  lt_printf(lt, __FILE__, __func__, __LINE__, format,  ##__VA_ARGS__)
+
+//输出接口
+// extern void Console_Output(uint8_t* str, uint32_t len)
+// {
+//     printf("%.*s\n", len, str);
+// }
 
 /*=========== log tree setting over ===========*/ 
 
@@ -38,12 +46,11 @@ extern "C" {
 
 #endif
 
-int my_printf(const uint8_t *format, ...);
 
 
-#define lt_print(lt, format, ...)  lt_printf(lt, __FILE__, __func__, __LINE__, format,  ##__VA_ARGS__) 
 
-int lt_printf(lt_core_t* lt, const uint8_t* flie, const uint8_t* func, uint32_t line, uint8_t *format, ...);
+
+
 
 
 #ifdef __cplusplus
