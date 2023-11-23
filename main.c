@@ -3,53 +3,10 @@
 #include <stdlib.h>
 #include "log_tree.h"
 
-#include <sys/wait.h>
-
 #define log(format, ...)   printf(format"\r\n", ##__VA_ARGS__)
 
-lt_core_t lt = lt_Default_Setting;
+lt_core_t lt = lt_Default_Setting();
 
-void test_ringbuffer()
-{
-    uint8_t recivce[4];
-    uint8_t buffer[3];
-    int time = 0;
-    lt_ringbuffer_Init(3);
-
-    while(1)
-    {
-        // gets(recivce);
-
-        for(int i=0;i<3;i++)
-        {
-            lt_ringbuffer_push(recivce[i]);
-        }
-
-        memset(buffer, 0, 4);
-        for(int i=0;i<3;i++)
-        {
-            buffer[i] = lt_ringbuffer_pop();
-        }
-        log("RingBuffer char:%s", buffer);
-
-    }
-
-}
-
-void printf_test()
-{
-    lt_ringbuffer_Init(300);
-
-    int i = 600;
-    char str[] = "evwdv4856ty?123243";
-    float m = 3.1415926;
-    int hex = 0x55FCBD;
-
-    // int number = my_printf("!@#$%^%\r\nint:%d\r\nstr:%s\r\nfloat:%f\r\nhex:%x\r\nScientific notation:%e\r\n",
-    //                                                      i, str, m, hex, m);
-    // printf("input number:%d\r\n", number);
-    lt_ringbuffer_pop_str();
-}
 
 void list_test()
 {
@@ -129,10 +86,6 @@ void functionA()
 
 void main()
 {
-    // test_ringbuffer();
-
-    // printf_test();
-
     // list_test();
    
     List_Init(&lt.fnl);
@@ -143,7 +96,6 @@ void main()
     lt_print(&lt, "print test\r\n");
     lt_print(&lt, "log tree test over\r\n");
 
-    // lt.fnl.printList(&lt.fnl.list);
 }
 
 
