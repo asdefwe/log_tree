@@ -151,11 +151,11 @@ typedef struct
 #define TRUE	1
 #define FALSE	0
 
-#define lt_Default_Setting {										\
+#define lt_Default_Setting() {										\
 	.SingleRowFormat.filename = FALSE,								\
 	.SingleRowFormat.function = TRUE,								\
 	.SingleRowFormat.line = FALSE,									\
-	.SingleRowFormat.Interval_format = "  ",						\
+	.SingleRowFormat.Interval_format = " ",							\
 	.MultipleRowFormat.FirstTextIndent_format = " ",				\
 	.MultipleRowFormat.FirstTextIndent_length = 1,					\
 	.MultipleRowFormat.SecondaryTextIndent1_format = "|",			\
