@@ -104,26 +104,26 @@ void list_test()
 
 void functionD()
 {
-    lt_printf(&lt, __FILE__, __func__, __LINE__, "funcD is running\r\n");
+    lt_print(&lt, "funcD is running\r\n");
 }
 
 void functionC()
 {
-    lt_printf(&lt, __FILE__, __func__, __LINE__, "funcC is running, will run func D\r\n");
+    lt_print(&lt, "funcC is running, will run func D\r\n");
     functionD();
 }
 
 void functionB()
 {
-    lt_printf(&lt, __FILE__, __func__, __LINE__, "funcB is running, will run func C\r\n");
+    lt_print(&lt, "funcB is running, will run func C\r\n");
     functionC();
-    lt_printf(&lt, __FILE__, __func__, __LINE__, "funcB is run 123456\r\n");
-    lt_printf(&lt, __FILE__, __func__, __LINE__, "funcB is run over\r\n");
+    lt_print(&lt, "funcB is run 123456\r\n");
+    lt_print(&lt, "funcB is run over\r\n");
 }
 
 void functionA()
 {
-    lt_printf(&lt, __FILE__, __func__, __LINE__, "funcA is running, will run func B\r\n");
+    lt_print(&lt, "funcA is running, will run func B\r\n");
     functionB();
 }
 
@@ -138,10 +138,10 @@ void main()
     List_Init(&lt.fnl);
     
     printf("======================\r\n");
-    lt_printf(&lt, __FILE__, __func__, __LINE__, "log tree test is running\r\n");
+    lt_print(&lt, "log tree test is running\r\n");
     functionA();
-
-    lt_printf(&lt, __FILE__, __func__, __LINE__, "log tree test over\r\n");
+    lt_print(&lt, "print test\r\n");
+    lt_print(&lt, "log tree test over\r\n");
 
     // lt.fnl.printList(&lt.fnl.list);
 }

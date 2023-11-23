@@ -41,6 +41,7 @@ extern "C" {
 int my_printf(const uint8_t *format, ...);
 
 
+#define lt_print(lt, format, ...)  lt_printf(lt, __FILE__, __func__, __LINE__, format,  ##__VA_ARGS__) 
 
 int lt_printf(lt_core_t* lt, const uint8_t* flie, const uint8_t* func, uint32_t line, uint8_t *format, ...);
 

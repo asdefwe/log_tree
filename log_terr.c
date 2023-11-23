@@ -290,9 +290,7 @@ uint32_t List_Init(Founction_name_List_t* Fnl)
 /*===============================================================*/
 /*                        log tree kernel                        */
 /*===============================================================*/
-
-// #define lg_Print(lt_core_t lt, format, ...)  lt_printf(lt, format,  ##__VA_ARGS__)     
-
+    
    
 // #define lg_Print(lt_core_t lt, format, ...)  {                      \
 //     char* FileName = __FILE__;                                                          \
@@ -371,7 +369,7 @@ void AddMultipleRowFormat_middle(lt_core_t* lt, uint8_t* str)
 {
     memcpy(str, 
            lt->MultipleRowFormat.SecondarySecondaryTextIndent_format,
-           3);
+           strlen(lt->MultipleRowFormat.SecondarySecondaryTextIndent_format));
 }
 
 //添加      “--”
@@ -430,7 +428,6 @@ int lt_printf(lt_core_t* lt,
 
     return count;
 }
-
 
 
 
