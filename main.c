@@ -8,57 +8,6 @@
 lt_core_t lt = lt_Default_Setting();
 
 
-void list_test()
-{
-    printf("======list strcut test======\r\n");
-
-#define fnl_test    lt.fnl
-
-    Founction_name_List_t fnl1;
-    List_Init(&fnl_test);
-    printf("-------------------------------------------\r\n");
-    printf("Save founction1\r\n");
-    fnl_test.UpdataList(&fnl_test.list, "asdgv");
-    fnl_test.printList(&fnl_test.list);
-    printf("-------------------------------------------\r\n");
-    printf("Save founction2\r\n");
-    fnl_test.UpdataList(&fnl_test.list, "15609");
-    fnl_test.printList(&fnl_test.list);
-    printf("-------------------------------------------\r\n");
-    printf("Save founction3\r\n");
-    fnl_test.UpdataList(&fnl_test.list, "[tyn]");
-    fnl_test.printList(&fnl_test.list);
-    printf("-------------------------------------------\r\n");
-    printf("Save founction4\r\n");
-    fnl_test.UpdataList(&fnl_test.list, "vb456");
-    fnl_test.printList(&fnl_test.list);
-    printf("-------------------------------------------\r\n");
-    printf("Save founction5\r\n");
-    fnl_test.UpdataList(&fnl_test.list, "-+*/+");
-    fnl_test.printList(&fnl_test.list);
-    printf("-------------------------------------------\r\n");
-    printf("Save founction6\r\n");
-    fnl_test.UpdataList(&fnl_test.list, "#!$*^");
-    fnl_test.printList(&fnl_test.list);
-    printf("-------------------------------------------\r\n");
-    printf("Save founction7\r\n");
-    fnl_test.UpdataList(&fnl_test.list, "dfb0b");
-    fnl_test.printList(&fnl_test.list);
-    printf("-------------------------------------------\r\n");
-    printf("Del until founction6\r\n");
-    fnl_test.UpdataList(&fnl_test.list, "#!$*^");
-    fnl_test.printList(&fnl_test.list);
-    printf("-------------------------------------------\r\n");
-    printf("Del until founction6\r\n");
-    fnl_test.UpdataList(&fnl_test.list, "#!$*^");
-    fnl_test.printList(&fnl_test.list);
-    printf("-------------------------------------------\r\n");
-    printf("Del until founction3\r\n");
-    fnl_test.UpdataList(&fnl_test.list, "[tyn]");
-    fnl_test.printList(&fnl_test.list);
-    printf("-------------------------------------------\r\n");
-}
-
 void functionD()
 {
     lt_print(&lt, "funcD is running\r\n");
@@ -87,8 +36,6 @@ void functionA()
 
 void main()
 {
-    // list_test();
-   
     List_Init(&lt.fnl);
     
     printf("======================\r\n");
