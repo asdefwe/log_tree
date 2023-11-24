@@ -6,7 +6,7 @@
 extern "C" {
 #endif
 
-#include <stdlib.h>
+
 #include <stdint.h>
 
 
@@ -15,37 +15,24 @@ extern "C" {
 /*                           ringbuffer                          */
 /*===============================================================*/
 
-typedef struct{	
-	uint8_t* 	buffer;
-	uint64_t	buffer_size;
-	uint64_t 	length;
-	uint8_t* 	read;
-	uint8_t* 	write;
-
-}log_tree_ringbuffer_t, *log_tree_ringbuffer_p;
-
-typedef struct 
-{
+typedef struct
+{	
 	uint8_t* 	buffer;
 	uint8_t* 	read;
 	uint8_t* 	write;
 
-}lt_QueueBuffer_t;
-
+}lt_QueueBuffer_Core_t;
 
 typedef struct 
 {
 	uint32_t	buffer_size;
-	uint32_t	number;
-	lt_QueueBuffer_t buffer
+	lt_QueueBuffer_Core_t buffer;
+
 }lg_Queue_t;
 
 
 void lt_ringbuffer_Init(long unsigned int size);
-uint32_t lt_ringbuffer_push(uint8_t data);
-uint8_t lt_ringbuffer_pop(void);
-uint32_t lt_ringbuffer_push_str(uint8_t* str, int size);
-uint32_t lt_ringbuffer_pop_str(void);
+
 
 
 /*===============================================================*/
@@ -70,7 +57,6 @@ typedef struct
 	struct lg_ListItem_t*  pxPrevious;		// 上一个节点
 
 }lg_MiniListItem_t;
-
 
 typedef struct 
 {
@@ -103,9 +89,9 @@ uint32_t List_Init(Founction_name_List_t* fnl);
 /*===============================================================*/
 
 /*	
- |	[position][function1][line]   log_tree begin
- |		↑     	   ↑	   ↑    ↑
- |		|     	   |       |  与输出内容的间隔格式						
+ |	[position][function1][line] log_tree begin
+ |		↑     	   ↑	   ↑   ↑
+ |		|     	   |       | 与输出内容的间隔格式						
  |		|     	   |     是否显示代码行数
  |      |	     是否显示函数名
  |	是否显示文件路径
@@ -175,7 +161,7 @@ typedef struct
 	.MultipleRowFormat.SecondaryTextIndent1_format = "|",			\
 	.MultipleRowFormat.SecondaryTextIndent2_format = "-",			\
 	.MultipleRowFormat.SecondaryTextIndent2_length = 1,				\
-	.MultipleRowFormat.SecondarySecondaryTextIndent_format = " "  \
+	.MultipleRowFormat.SecondarySecondaryTextIndent_format = " "  	\
 }
 
 
