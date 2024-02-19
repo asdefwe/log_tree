@@ -1,7 +1,10 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+
 #include "log_tree.h"
+
+#include "a.h"
 
 #define log(format, ...)   printf(format"\r\n", ##__VA_ARGS__)
 
@@ -25,6 +28,7 @@ void functionB()
     lt_print(&lt, "funcB is running, will run func C\r\n");
     functionC();
     lt_print(&lt, "funcB is run 123456\r\n");
+    printA();
     lt_print(&lt, "funcB is run over\r\n");
 }
 
@@ -45,8 +49,6 @@ void main()
     lt_print(&lt, "log tree test over\r\n");
 
 }
-
-
 
 
 
