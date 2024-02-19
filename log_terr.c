@@ -1,10 +1,6 @@
 
 #include "log_tree.h"
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
 
 #ifdef __cplusplus
 extern "C" {
@@ -20,15 +16,15 @@ extern "C" {
 
 // void lt_ringbuffer_Init(long unsigned int size)
 // {
-//     //使用标准malloc函数申请空间
+//     // 使用标准malloc函数申请空间
 //     uint8_t* buffer = (uint8_t*)malloc(size);
 //     lt_ringbuffer.buffer = buffer;      //记录ringbuffer的开始地址
     
-//     //
+    
 //     lt_ringbuffer.buffer_size = size;
 //     lt_ringbuffer.length = 0;
     
-//     //初始化
+//     // 初始化
 //     lt_ringbuffer.write = lt_ringbuffer.buffer;
 //     lt_ringbuffer.read = lt_ringbuffer.buffer;
 
@@ -167,9 +163,9 @@ uint32_t List_Init(Founction_name_List_t* Fnl)
     return 0;
 }
 
-/*===============================================================*/
-/*                        log tree kernel                        */
-/*===============================================================*/
+/*====================================================*/
+/*                  log tree kernel                   */
+/*====================================================*/
 
 void AddSingleRowFormat(lt_core_t* lt,
                         const uint8_t* flie, const uint8_t* func, const uint32_t line,
@@ -274,9 +270,7 @@ extern int lt_printf(lt_core_t* lt,
     memset(TX_buffer, 0, TX_buffer_size);
 
     res = lt->fnl.UpdataList(&lt->fnl.list, func);
-    // lt->fnl.printList(&lt->fnl.list);
 
-#if 1
     //添加辅助信息
     if(lt->fnl.list.NumberOfItems == 1)
     {
@@ -299,7 +293,6 @@ extern int lt_printf(lt_core_t* lt,
         AddMultipleRowFormat_end(lt, TX_buffer + strlen(TX_buffer));
         AddSingleRowFormat(lt, flie, func, line, TX_buffer + strlen(TX_buffer));
     }
-#endif
 
     va_start(args,format);
     count = vsnprintf(TX_buffer + strlen(TX_buffer), TX_buffer_size, format, args);
@@ -309,9 +302,6 @@ extern int lt_printf(lt_core_t* lt,
 
     return count;
 }
-
-
-
 
 
 

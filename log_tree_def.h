@@ -1,14 +1,11 @@
 #ifndef __LOG_TREE_DEF_H
 #define __LOG_TREE_DEF_H
 
-
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-
 #include <stdint.h>
-
 
 
 /*===============================================================*/
@@ -81,15 +78,11 @@ typedef struct
 uint32_t List_Init(Founction_name_List_t* fnl);
 
 
-
-
-
 /*===============================================================*/
 /*                        log tree kernel                        */
 /*===============================================================*/
-
-/*	
- |	[position][function1][line] log_tree begin
+	
+/*	[position][function1][line] log_tree begin
  |		↑     	   ↑	   ↑   ↑
  |		|     	   |       | 与输出内容的间隔格式						
  |		|     	   |     是否显示代码行数
@@ -143,10 +136,6 @@ typedef struct
 
 
 
-/*
-  |
-  */
-// void log_tree_Init(log_tree_ringbuffer_p ringbuffer );
 
 #define TRUE	1
 #define FALSE	0
