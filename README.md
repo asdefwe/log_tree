@@ -13,6 +13,8 @@ Linux安装gcc方法（超简单安装）
 https://blog.csdn.net/qq_45780190/article/details/114770824
 
 运行效果示例：
+
+```
 ============ log_tree running ============
 
 ======================
@@ -26,6 +28,8 @@ https://blog.csdn.net/qq_45780190/article/details/114770824
  |  |-[functionB] funcB is run over
 [main] print test
 [main] log tree test over
+```
+
 
 后续计划：
 1、优化多线程使用；
