@@ -96,7 +96,7 @@ typedef struct
 	uint8_t filename;				//是否显示文件路径
 	uint8_t function;				//是否显示函数名
 	uint8_t	line;					//是否显示代码行数
-	uint8_t*	Interval_format;	 	//与输出内容的间隔格式
+	uint8_t *Interval_format;	 	//与输出内容的间隔格式
 
 }lt_SingleRowFormat_t;
 
@@ -116,11 +116,11 @@ typedef struct
 typedef struct 
 {
 	uint8_t*	FirstTextIndent_format;					//首行缩进格式
-	uint8_t		FirstTextIndent_length;					//首行缩进长度
+	uint8_t*	SecondarySecondaryTextIndent_format;	//次级次级缩进格式
 	uint8_t*	SecondaryTextIndent1_format;				//次级缩进格式
 	uint8_t*	SecondaryTextIndent2_format;				//次级缩进格式
 	uint8_t		SecondaryTextIndent2_length;				//次级缩进长度
-	uint8_t*	SecondarySecondaryTextIndent_format;	//次级次级缩进格式
+	uint8_t		FirstTextIndent_length;					//首行缩进长度
 
 }lt_MultipleRowFormat_t;
 
