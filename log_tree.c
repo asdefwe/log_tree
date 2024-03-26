@@ -8,16 +8,6 @@
  * 
  * Copyright (c) 2024 by ${git_name_email}, All Rights Reserved. 
  */
-/*
- * @Author: asdefwe 535294621@qq.com
- * @Date: 2024-03-01 08:53:35
- * @LastEditors: asdefwe 535294621@qq.com
- * @LastEditTime: 2024-03-26 11:02:37
- * @FilePath: \log_tree\log_tree.c
- * @Description: 
- * 
- * Copyright (c) 2024 by ${git_name_email}, All Rights Reserved. 
- */
 
 #include "log_tree.h"
 

@@ -1,3 +1,13 @@
+/*
+ * @Author: asdefwe 535294621@qq.com
+ * @Date: 2024-03-26 14:06:01
+ * @LastEditors: asdefwe 535294621@qq.com
+ * @LastEditTime: 2024-03-26 15:25:06
+ * @FilePath: \log_tree\log_tree_def.h
+ * @Description: 
+ * 
+ * Copyright (c) 2024 by ${git_name_email}, All Rights Reserved. 
+ */
 #ifndef __LOG_TREE_DEF_H
 #define __LOG_TREE_DEF_H
 
