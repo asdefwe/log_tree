@@ -2,7 +2,7 @@
  * @Author: asdefwe 535294621@qq.com
  * @Date: 2024-03-01 08:53:35
  * @LastEditors: asdefwe 535294621@qq.com
- * @LastEditTime: 2024-03-26 11:32:01
+ * @LastEditTime: 2024-03-26 15:45:06
  * @FilePath: \log_tree\log_tree.c
  * @Description: 
  * 
@@ -438,7 +438,7 @@ void AddMultipleRowFormat_end(lt_core_t *lt, uint8_t *str)
 
 #include <stdarg.h>
 
-uint8_t TX_buffer[TX_buffer_size];
+static uint8_t TX_buffer[TX_buffer_size];
 /**
  * @description: log tree 核心输出函数
  * @param {lt_core_t} *lt: log tree 核心句柄
@@ -448,7 +448,9 @@ uint8_t TX_buffer[TX_buffer_size];
  * @param {uint8_t} *format: 输入字符串
  * @return {uint32_t}: 输出的字符数量
  */
-extern uint32_t lt_printf(lt_core_t *lt, const uint8_t *flie, const uint8_t *func, uint32_t line, uint8_t *format, ...)
+extern uint32_t lt_printf(lt_core_t *lt,
+                          const uint8_t *flie, const uint8_t *func, uint32_t line,
+                          uint8_t *format, ...)
 {
     va_list args;
     uint32_t count;

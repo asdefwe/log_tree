@@ -2,7 +2,7 @@
  * @Author: asdefwe 535294621@qq.com
  * @Date: 2024-03-26 14:06:01
  * @LastEditors: asdefwe 535294621@qq.com
- * @LastEditTime: 2024-03-26 15:16:57
+ * @LastEditTime: 2024-03-26 15:55:40
  * @FilePath: \log_tree\log_tree.h
  * @Description: 
  * 
@@ -43,8 +43,7 @@ uint32_t lt_printf(lt_core_t *lt, const uint8_t *flie, const uint8_t *func, uint
 
 /*=========== log tree setting over ===========*/
 
-#define TX_buffer_size 256
-#define RX_buffer_size 124
+#define TX_buffer_size 256  // 单行log最长字符串
 
 #define lt_sucess 0
 #define lt_Insufficient_buffer 1
