@@ -50,8 +50,15 @@ int lt_printf(lt_core_t* lt, const uint8_t* flie, const uint8_t* func, uint32_t 
 
 
 
+uint32_t List_Init(Founction_name_List_t* fnl);
 
+uint32_t lt_RB_Init(lg_Queue_t *RB_handle, uint32_t buffer_size);
 
+uint32_t lt_RB_Del(lg_Queue_t *RB_handle);
+
+uint32_t RB_Write_String(lg_Queue_t *RB_handle, uint8_t *input_addr, uint32_t write_Length);
+
+uint8_t RB_Read_String(lg_Queue_t *RB_handle, uint8_t *output_addr, uint32_t read_Length);
 
 
 
@@ -61,4 +68,5 @@ int lt_printf(lt_core_t* lt, const uint8_t* flie, const uint8_t* func, uint32_t 
 
 
 #endif
+
 

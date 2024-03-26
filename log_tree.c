@@ -10,27 +10,121 @@ extern "C" {
 /*====================================================*/
 /*                     ringbuffer                     */
 /*====================================================*/
-#define ringbuffer_end_address  (lt_ringbuffer.buffer + lt_ringbuffer.buffer_size - 1)
 
-// log_tree_ringbuffer_t lt_ringbuffer;
+uint32_t lt_RB_Init(lg_Queue_t *RB_handle,uint32_t buffer_size)
+{
+    if (buffer_size < 2)
+    {
+        return CacheTooSmall;
+    }
+    if (buffer_size >= BufferSize_MAX)
+    {
+        return CacheTooLarge;
+    }
 
-// void lt_ringbuffer_Init(long unsigned int size)
-// {
-//     // 使用标准malloc函数申请空间
-//     uint8_t* buffer = (uint8_t*)malloc(size);
-//     lt_ringbuffer.buffer = buffer;      //记录ringbuffer的开始地址
-    
-    
-//     lt_ringbuffer.buffer_size = size;
-//     lt_ringbuffer.length = 0;
-    
-//     // 初始化
-//     lt_ringbuffer.write = lt_ringbuffer.buffer;
-//     lt_ringbuffer.read = lt_ringbuffer.buffer;
+    RB_handle->buffer.addr = (uint8_t *)calloc(buffer_size, sizeof(uint8_t));
+    RB_handle->buffer.read = RB_handle->buffer.addr;
+    RB_handle->buffer.write = RB_handle->buffer.addr;
+    RB_handle->Length = 0;
+    RB_handle->Max_Length = buffer_size;
 
-// }
+    return OK;
+}
 
+uint32_t lt_RB_Del(lg_Queue_t *RB_handle)
+{
+    free(RB_handle->buffer.addr);
+    RB_handle->buffer.read = NULL;
+    RB_handle->buffer.write = NULL;
+    RB_handle->Length = 0;
+    RB_handle->Max_Length = 0;
 
+    return OK;
+}
+
+uint32_t RB_Write_String(lg_Queue_t *RB_handle, uint8_t *input_addr, uint32_t write_Length)
+{
+    // 如果不够存储空间存放新数据,返回错误
+    if ((RB_handle->Length + write_Length) > (RB_handle->Max_Length))
+    {
+        return BufferExceeded;
+    }
+    else
+    {
+        // 设置两次写入长度
+        uint32_t write_size_a, write_size_b;
+
+        // 如果顺序可用长度小于需写入的长度，需要将数据拆成两次分别写入
+        if ((RB_handle->Max_Length - (uint32_t)(RB_handle->buffer.write - RB_handle->buffer.addr)) < write_Length)
+        {
+            write_size_a = RB_handle->Max_Length - (RB_handle->buffer.write - RB_handle->buffer.addr); // 从尾指针开始写到储存数组末尾
+            write_size_b = write_Length - write_size_a;                                                // 从储存数组开头写数据
+
+            // 分别拷贝a、b段数据到储存数组中
+            memcpy(RB_handle->buffer.write, input_addr, write_size_a);
+            memcpy(RB_handle->buffer.addr, input_addr + write_size_a, write_size_b);
+
+            RB_handle->Length += write_Length;                               // 记录新存储了多少数据量
+            RB_handle->buffer.write = RB_handle->buffer.addr + write_size_b; // 重新定位尾指针位置
+        }
+        else // 如果顺序可用长度大于或等于需写入的长度，则只需要写入一次
+        {
+            write_size_a = write_Length; // 从尾指针开始写到储存数组末尾
+
+            memcpy(RB_handle->buffer.write, input_addr, write_size_a);
+
+            RB_handle->Length += write_Length;       // 记录新存储了多少数据量
+            RB_handle->buffer.write += write_size_a; // 重新定位尾指针位置
+
+            // 如果写入数据后尾指针刚好写到数组尾部，则回到开头，防止越位
+            if (RB_handle->buffer.write == (RB_handle->buffer.addr + RB_handle->Max_Length))
+            {
+                RB_handle->buffer.write = 0;
+            }
+        }
+
+        return OK;
+    }
+}
+
+uint8_t RB_Read_String(lg_Queue_t *RB_handle, uint8_t *output_addr, uint32_t read_Length)
+{
+    if (read_Length > RB_handle->Length)
+    {
+        return BufferExceeded;
+    }
+    else
+    {
+        uint32_t Read_size_a, Read_size_b;
+        if (read_Length > (RB_handle->Max_Length - (uint32_t)(RB_handle->buffer.read - RB_handle->buffer.addr)))
+        {
+            Read_size_a = RB_handle->Max_Length - (RB_handle->buffer.read - RB_handle->buffer.addr);
+            Read_size_b = read_Length - Read_size_a;
+
+            memcpy(output_addr, RB_handle->buffer.read, Read_size_a);
+            memcpy(output_addr + Read_size_a, RB_handle->buffer.addr, Read_size_b);
+
+            RB_handle->Length -= read_Length;                              // 记录剩余数据量
+            RB_handle->buffer.read = RB_handle->buffer.addr + Read_size_b; // 重新定位头指针位置
+        }
+        else
+        {
+            Read_size_a = read_Length;
+
+            memcpy(output_addr, RB_handle->buffer.read, Read_size_a);
+
+            RB_handle->Length -= read_Length;      // 记录剩余数据量
+            RB_handle->buffer.read += Read_size_a; // 重新定位头指针位置
+
+            // 如果读取数据后头指针刚好写到数组尾部，则回到开头，防止越位
+            if (RB_handle->buffer.read == (RB_handle->buffer.addr + RB_handle->Max_Length))
+            {
+                RB_handle->buffer.read = 0;
+            }
+        }
+        return OK;
+    }
+}
 
 
 /*====================================================*/

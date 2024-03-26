@@ -12,24 +12,32 @@ extern "C" {
 /*                           ringbuffer                          */
 /*===============================================================*/
 
+#define ringbuffer_end_address  (lt_ringbuffer.buffer + lt_ringbuffer.buffer_size - 1)
+#define BufferSize_MAX	0xFFFFFFFF
+
 typedef struct
 {	
-	uint8_t* 	buffer;
-	uint8_t* 	read;
-	uint8_t* 	write;
+	uint8_t	*addr;		// 缓存区储存数字地址
+	uint8_t	*read;		// 读指针，永远指向有数据的地址，除非该地址与写重叠
+	uint8_t	*write;		// 写指针，永远指向没有数据的地址
 
-}lt_QueueBuffer_Core_t;
+}lt_QueueBuffer_Core;
 
 typedef struct 
 {
-	uint32_t	buffer_size;
-	lt_QueueBuffer_Core_t buffer;
+	lt_QueueBuffer_Core buffer;	// 存储核心
+	uint32_t Length;		// 已存储数据量
+	uint32_t Max_Length ;	// 缓存区最大可存储空间
 
 }lg_Queue_t;
 
-
-void lt_ringbuffer_Init(long unsigned int size);
-
+typedef enum
+{
+	OK = 0,
+	CacheTooSmall,
+	CacheTooLarge,
+	BufferExceeded
+}RB_Return;
 
 
 /*===============================================================*/
@@ -75,7 +83,7 @@ typedef struct
 
 }Founction_name_List_t;
 
-uint32_t List_Init(Founction_name_List_t* fnl);
+
 
 
 /*===============================================================*/
@@ -129,7 +137,7 @@ typedef struct
 	lt_SingleRowFormat_t 		SingleRowFormat;		//单行格式
 	lt_MultipleRowFormat_t		MultipleRowFormat;		//多行间格式
 	Founction_name_List_t 		fnl;					//函数名列表
-	// log_tree_ringbuffer_p 		log_buff;				//输出缓存		
+	lg_Queue_t			 		log_buff;				//输出缓存		
 	uint8_t	isbegin;		
 	
 }lt_core_t;
